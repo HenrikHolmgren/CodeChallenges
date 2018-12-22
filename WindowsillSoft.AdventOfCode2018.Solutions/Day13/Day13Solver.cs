@@ -16,6 +16,7 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day13
         public void Solve()
         {
             var input = File.ReadAllLines("Day13/Day13Input.txt");
+
             char[,] map = new char[input[0].Length, input.Length];
             for (int y = 0; y < input.Length; y++)
                 for (int x = 0; x < input[0].Length; x++)
@@ -47,29 +48,25 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day13
 
             while (cars.Count > 1)
             {
-                /*
-                Console.Clear();
-                WriteMap(map);
-                foreach(var car in cars)
+                var collidedCars = new List<Car>();
+                foreach (var car in cars.OrderBy(p => p.Y).ThenBy(p => p.X).ToList())
                 {
-                    Console.CursorLeft = car.X;
-                    Console.CursorTop = car.Y;
-                    Console.Write('X');
-                }
+                    if (collidedCars.Contains(car))
+                        continue;
 
-                Console.ReadKey();
-                */
-                foreach (var car in cars)
                     car.Move(map[car.X + car.Vx, car.Y + car.Vy]);
-                //Console.WriteLine(string.Join(", ", cars));
-                var collisions = cars.GroupBy(p => (p.X, p.Y)).Where(p => p.Count() > 1).ToList();
-                if (collisions.Any())
-                {
-                    Console.WriteLine($"Collisions at {string.Join(", ", collisions.Select(p => $"{p.First().X}, {p.First().Y}"))}");
-                    foreach (var collidedCar in collisions.SelectMany(p => p).Distinct())
-                        cars.Remove(collidedCar);
+                    var doublet = cars.FirstOrDefault(p => p != car && p.X == car.X && p.Y == car.Y);
+                    if (doublet != null)
+                    {
+                        collidedCars.Add(car);
+                        collidedCars.Add(doublet);
+                        Console.WriteLine($"Collision at ({car.X}, {car.Y})");
+                    }
                 }
+                foreach (var wreck in collidedCars)
+                    cars.Remove(wreck);
             }
+
             Console.WriteLine($"Final car: {cars.Single()}");
         }
 

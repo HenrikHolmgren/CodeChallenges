@@ -15,7 +15,7 @@ namespace Windowsillsoft.AdventOfCode2018.Presentation
             bool exit = false;
             var menu = new EasyConsoleCore.Menu();
             foreach (var solver in solvers)
-                menu = menu.Add(solver.Description, () => solver.Solve());
+                menu = menu.Add(solver.Description, () => { Console.Clear(); solver.Solve(); });
             menu.Add("Exit", () => exit = true);
 
             while (!exit)
