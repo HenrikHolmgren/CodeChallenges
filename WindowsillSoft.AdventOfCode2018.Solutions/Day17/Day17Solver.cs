@@ -41,7 +41,7 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day17
 
             WriteStateToFile(input, "C:\\temp\\Day17Out.txt");
             Console.WriteLine($"Steady state reached with {waterCount} tiles of water ({CountWaters(input, true) - miny} wet tiles) at iteration {iterations}.");
-
+            Console.WriteLine("(Should have been 31412)");
         }
 
         private int CountWaters(char[,] input, bool includeWet)
