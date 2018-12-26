@@ -52,7 +52,7 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day22
             };
             while (Fringe.Any())
             {
-                var candidate = Fringe.OrderBy(p => p.d).First();
+                var candidate = Fringe.OrderBy(p => p.d + (Math.Abs(p.x - Target.x) + Math.Abs(p.y - Target.y) + p.t == Tool.Torch ? 0 : 7)).First();
                 Fringe.Remove(candidate);
 
                 //We know we are breadth-first searching so any visited location will be visited in shorter moves than this.
