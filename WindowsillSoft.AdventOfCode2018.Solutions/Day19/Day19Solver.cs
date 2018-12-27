@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using WindowsillSoft.AdventOfCode2018.Core;
+using WindowsillSoft.AdventOfCode2018.Core.Utilities;
 
 namespace WindowsillSoft.AdventOfCode2018.Solutions.Day19
 {
@@ -16,67 +17,138 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day19
         public void Solve()
         {
             var input = File.ReadAllLines("Day19/Day19Input.txt");
-            var ipReg = int.Parse(input[0].Split()[1]);
+
+            var ipReg = (ElfCodeMachine.Register)int.Parse(input[0].Split()[1]);
             var instructions = input.Skip(1)
                 .Select(p => p.Split())
-                .Select(p => 
-                    (Instr: p[0], 
-                    Para: new OpcodeParameterSet(p.Skip(1).Select(q => int.Parse(q)).ToArray())))
-                .ToList();
-            
-            var state = new RegisterState();
+                .Select(p => new ElfCodeMachine.Operation(p[0], (p.Skip(1).Select(q => int.Parse(q)).ToArray())))
+                .ToArray();
 
-            var instructionSet = GetInstructionSet();
-            long runs = 0;
+            var machine = new ElfCodeMachine(instructions)
+                .WithProgramCounterRegister(ipReg)
+                .WithRegisterState(ElfCodeMachine.Register.R0, 1);
 
-            while(true)
+            Console.WriteLine(machine.ListProgram());
+
+            //machine.Execute();
+            //Console.WriteLine($"Final state: [{String.Join( " ", machine.GetState())}] in {machine.ExecutedInstructions} steps.");
+
+            for (int i = 0; i < 20; i++)
             {
-                runs++;
-                var nextInstruction = instructions[state[ipReg]];
-                var newState = instructionSet[nextInstruction.Instr].DoWork(state, nextInstruction.Para);
-                if (newState[ipReg] >= instructions.Count()) break;
-                state = newState;
-                if (state[ipReg]+1 >= instructions.Count()) break;
-
-                state[ipReg]++;
-                //Console.WriteLine(state);
-                if (runs % 100_000 == 0) Console.Write(".");
+                var state = machine.Step(true);
             }
+            //var state = new RegisterState();
 
-            Console.WriteLine();
-            Console.WriteLine($"End state after {runs} instructions: {state}");
+            //long runs = 0;
+
+            //while (true)
+            //{
+            //    runs++;
+            //    var nextInstruction = instructions[state[ipReg]];
+            //    var newState = instructionSet[nextInstruction.Instr].DoWork(state, nextInstruction.Para);
+            //    if (newState[ipReg] >= instructions.Count()) break;
+            //    state = newState;
+            //    if (state[ipReg] + 1 >= instructions.Count()) break;
+
+            //    state[ipReg]++;
+            //    if (runs % 100_000 == 0) Console.Write(".");
+            //}
+
+            //Console.WriteLine();
+            //Console.WriteLine($"End state after {runs} instructions: {state}");
 
             //State with [0] = 1 was run for 10 mins (runs >= 10_000_000_000) without result, so likely program has exponential runtime.
-            //Resorted to manual analysis of source.
-        }
+            //Resorted to manual analysis of source:
+            /*
+                With instruction counter in R3:
+                0: ADDI; R3 <- R3 + 16    ; JMP 17
+                1: SETI; R5 <- 1          ; R5 = 1
+                2: SETI; R2 <- 1          ; R2 = 1
+                3: MULR; R1 <- R5 * R2    
+                4: EQRR; R1 <- R1 = R4    
+                5: ADDR; R3 <- R1 + R3    ; IF (R4 == R2 * R5) 
+                6: ADDI; R3 <- R3 + 1     
+                7: ADDR; R0 <- R5 + R0    ;   R0 += R5
+                8: ADDI; R2 <- R2 + 1     ; R2++
+                9: GTRR; R1 <- R2 > R4    
+                10: ADDR; R3 <- R3 + R1   ; IF(R2 <= R4)
+                11: SETI; R3 <- 2         ;   JMP 3
+                12: ADDI; R5 <- R5 + 1    ; R5++
+                13: GTRR; R1 <- R5 > R4
+                14: ADDR; R3 <- R1 + R3   ; IF(R5 <= R4)
+                15: SETI; R3 <- 1         ;   JMP 2
+                16: MULR; R3 <- R3 * R3   ; HALT
+                17: ADDI; R4 <- R4 + 2
+                18: MULR; R4 <- R4 * R4
+                19: MULR; R4 <- R3 * R4   
+                20: MULI; R4 <- R4 * 11   ; R4 = ((R4 + 2) ^ 2) * 19 * 11 // R4 = (R4 + 2)^2 * 209
+                21: ADDI; R1 <- R1 + 6
+                22: MULR; R1 <- R1 * R3
+                23: ADDI; R1 <- R1 + 21   ; R1 = (R1 + 6) * 22 + 21; // R1 = 22 * R1 + 153
+                24: ADDR; R4 <- R4 + R1   ; R4 += R1;
+                25: ADDR; R3 <- R3 + R0   ; JMP +R0
+                26: SETI; R3 <- 0         ; JMP 1
+                27: SETR; R1 <- R3        
+                28: MULR; R1 <- R1 * R3
+                29: ADDR; R1 <- R3 + R1
+                30: MULR; R1 <- R3 * R1
+                31: MULI; R1 <- R1 * 14
+                32: MULR; R1 <- R1 * R3   ; R1 = 27 * 28 * 2 * 14 // R1 = 21168
+                33: ADDR; R4 <- R4 + R1   ; R4 += 21168;
+                34: SETI; R0 <- 0         ; R0 = 0
+                35: SETI; R3 <- 0         ; JMP 1
 
-        private static Dictionary<string, Opcode> GetInstructionSet()
-        {
-            return new List<Opcode>
-            {
-                new Opcode{Name = "addr", DoWork = (reg, par) => reg.WithValue(reg[par.A] + reg[par.B], par.C)},
-                new Opcode{Name = "addi", DoWork = (reg, par) => reg.WithValue(reg[par.A] + par.B, par.C)},
+            //Pseudo-assembly:
+                :init
+                R4 = 836;
+                R1 = 153;
+                R4 += R1; // = 989
+                IF(R0 == 1)
+                  R1 = (27 * 28 + 29) * 30 * 14 * 32; // = 10_550_400;
+                  R4 += R1 // = 10_551_389;  
 
-                new Opcode{Name = "mulr", DoWork = (reg, par) => reg.WithValue(reg[par.A] * reg[par.B], par.C)},
-                new Opcode{Name = "muli", DoWork = (reg, par) => reg.WithValue(reg[par.A] * par.B, par.C)},
+                R5 = 1
+                //[0 153 0 1 989 1] OR [0 10550400 0 1 10551389 1]  
+                :loop1
+                R2 = 1
+                :loop2
 
-                new Opcode{Name = "banr", DoWork = (reg, par) => reg.WithValue(reg[par.A] & reg[par.B], par.C)},
-                new Opcode{Name = "bani", DoWork = (reg, par) => reg.WithValue(reg[par.A] & par.B, par.C)},
+                IF (R4 == R2 * R5)
+                  R0 += R5
+                R2++
 
-                new Opcode{Name = "borr", DoWork = (reg, par) => reg.WithValue(reg[par.A] | reg[par.B], par.C)},
-                new Opcode{Name = "bori", DoWork = (reg, par) => reg.WithValue(reg[par.A] | par.B, par.C)},
+                IF(R2 <= R4)
+                  JMP loop2
+                R5++
 
-                new Opcode{Name = "setr", DoWork = (reg, par) => reg.WithValue(reg[par.A], par.C)},
-                new Opcode{Name = "seti", DoWork = (reg, par) => reg.WithValue(par.A, par.C)},
+                IF(R5 <= R4)
+                  JMP loop1
+                HALT
 
-                new Opcode{Name = "gtir", DoWork = (reg, par) => reg.WithValue(par.A > reg[par.B] ? 1 : 0, par.C)},
-                new Opcode{Name = "gtri", DoWork = (reg, par) => reg.WithValue(reg[par.A] > par.B ? 1 : 0, par.C)},
-                new Opcode{Name = "gtrr", DoWork = (reg, par) => reg.WithValue(reg[par.A] > reg[par.B] ? 1 : 0, par.C)},
+            //Pseudo-C#
+                
+                R4 = 836;
+                R1 = 153;
+                R4 += R1; // = 989
+                
+                IF(R0 == 1) {
+                  R1 = (27 * 28 + 29) * 30 * 14 * 32; // = 10_550_400;
+                  R4 += R1 // = 10_551_389;  
+                }
 
-                new Opcode{Name = "eqir", DoWork = (reg, par) => reg.WithValue(par.A == reg[par.B] ? 1 : 0, par.C)},
-                new Opcode{Name = "eqri", DoWork = (reg, par) => reg.WithValue(reg[par.A] == par.B ? 1 : 0, par.C)},
-                new Opcode{Name = "eqrr", DoWork = (reg, par) => reg.WithValue(reg[par.A] == reg[par.B] ? 1 : 0, par.C)},
-            }.ToDictionary(p=>p.Name);
+                R5 = 1;
+                do {
+                    R2 = 1;
+                    do {
+                        if (R4 == R2 * R5)
+                            R0 += R5;
+                        R2++;
+                    }
+                    while (R2 <= R4);
+                    R5++;
+                }
+                while (R5 <= R4);
+             */
         }
     }
 
@@ -138,7 +210,7 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day19
 
         public RegisterState(int[] state) =>
             (R0, R1, R2, R3, R4, R5) = (state[0], state[1], state[2], state[3], state[4], state[5]);
-        
+
         public int this[int index]
         {
             get => GetValue(index);
