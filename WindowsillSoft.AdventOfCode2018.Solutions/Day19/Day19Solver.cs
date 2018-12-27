@@ -25,38 +25,15 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day19
                 .ToArray();
 
             var machine = new ElfCodeMachine(instructions)
-                .WithProgramCounterRegister(ipReg)
-                .WithRegisterState(ElfCodeMachine.Register.R0, 1);
+                .WithProgramCounterRegister(ipReg);
 
             Console.WriteLine(machine.ListProgram());
 
-            //machine.Execute();
-            //Console.WriteLine($"Final state: [{String.Join( " ", machine.GetState())}] in {machine.ExecutedInstructions} steps.");
+            machine.Execute();
+            Console.WriteLine($"Running with R0 == 0 results in R0 being set to {machine.GetState()[0]} in {machine.ExecutedInstructions} steps.");
 
-            for (int i = 0; i < 20; i++)
-            {
-                var state = machine.Step(true);
-            }
-            //var state = new RegisterState();
-
-            //long runs = 0;
-
-            //while (true)
-            //{
-            //    runs++;
-            //    var nextInstruction = instructions[state[ipReg]];
-            //    var newState = instructionSet[nextInstruction.Instr].DoWork(state, nextInstruction.Para);
-            //    if (newState[ipReg] >= instructions.Count()) break;
-            //    state = newState;
-            //    if (state[ipReg] + 1 >= instructions.Count()) break;
-
-            //    state[ipReg]++;
-            //    if (runs % 100_000 == 0) Console.Write(".");
-            //}
-
-            //Console.WriteLine();
-            //Console.WriteLine($"End state after {runs} instructions: {state}");
-
+            int R4 = 10_551_389;
+            Console.WriteLine($"Running with R0 == 1 would result in R0 being set to: {Enumerable.Range(1, R4).Where(p => R4 % p == 0).Sum()}");
             //State with [0] = 1 was run for 10 mins (runs >= 10_000_000_000) without result, so likely program has exponential runtime.
             //Resorted to manual analysis of source:
             /*
@@ -148,141 +125,23 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day19
                     R5++;
                 }
                 while (R5 <= R4);
+
+            //Or a bit easier to read:
+            
+                int R4 = 989;
+                if(R0 = 1)
+                    R4 = 10_551_389;            
+                R0 = 0; 
+            
+                for (int R5 = 1; R5 <= R4; R5++)
+                    for (int R2 = 1; R2 <= R4; R2++)
+                        if(R4 == R2 * R5)
+                            R0 += R5;
+
+            //Which is the same as
+                int R4 = R0 == 0 ? 989 : 10_551_389;
+                R0 = Enumerable.Range(1, R4).Where(p => R4 % p == 0).Sum();
              */
         }
     }
-
-    public class Opcode
-    {
-        public string Name { get; set; }
-        public Func<RegisterState, OpcodeParameterSet, RegisterState> DoWork { get; set; }
-    }
-
-    public struct OpcodeParameterSet
-    {
-        public int A;
-        public int B;
-        public int C;
-
-        public OpcodeParameterSet(int[] state) =>
-           (A, B, C) = (state[0], state[1], state[2]);
-
-        public int this[int index]
-        {
-            get => GetValue(index);
-            set => SetValue(index, value);
-        }
-
-        private void SetValue(int index, int value)
-        {
-            switch (index)
-            {
-                case 0: A = value; break;
-                case 1: B = value; break;
-                case 2: C = value; break;
-                default: throw new IndexOutOfRangeException();
-            }
-        }
-
-        private int GetValue(int index)
-        {
-            switch (index)
-            {
-                case 0: return A;
-                case 1: return B;
-                case 2: return C;
-                default: throw new IndexOutOfRangeException();
-            }
-        }
-
-        public override string ToString()
-            => $"(A:{A} B:{B} C:{C})";
-    }
-
-    public struct RegisterState
-    {
-        public int R0;
-        public int R1;
-        public int R2;
-        public int R3;
-        public int R4;
-        public int R5;
-
-        public RegisterState(int[] state) =>
-            (R0, R1, R2, R3, R4, R5) = (state[0], state[1], state[2], state[3], state[4], state[5]);
-
-        public int this[int index]
-        {
-            get => GetValue(index);
-            set => SetValue(index, value);
-        }
-
-        private void SetValue(int index, int value)
-        {
-            switch (index)
-            {
-                case 0: R0 = value; break;
-                case 1: R1 = value; break;
-                case 2: R2 = value; break;
-                case 3: R3 = value; break;
-                case 4: R4 = value; break;
-                case 5: R5 = value; break;
-                default: throw new IndexOutOfRangeException();
-            }
-        }
-
-        private int GetValue(int index)
-        {
-            switch (index)
-            {
-                case 0: return R0;
-                case 1: return R1;
-                case 2: return R2;
-                case 3: return R3;
-                case 4: return R4;
-                case 5: return R5;
-                default: throw new IndexOutOfRangeException();
-            }
-        }
-
-        public RegisterState WithValue(int value, int index)
-        {
-            var result = new RegisterState();
-
-            (result.R0, result.R1, result.R2, result.R3, result.R4, result.R5) = (R0, R1, R2, R3, R4, R5);
-            result[index] = value;
-
-            return result;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is RegisterState reg)
-                return Equals(reg);
-            return false;
-        }
-
-        public bool Equals(RegisterState other)
-        {
-            return R0 == other.R0 &&
-                R1 == other.R1 &&
-                R2 == other.R2 &&
-                R3 == other.R3 &&
-                R4 == other.R4 &&
-                R5 == other.R5;
-        }
-
-        public override int GetHashCode()
-        {
-            var res = 0;
-            for (int i = 0; i < 6; i++)
-                res = res * 13 + this[i].GetHashCode();
-            return res;
-        }
-
-        public override string ToString()
-            => $"(0: {R0} 1: {R1} 2: {R2} 3: {R3} 4: {R4} 5: {R5})";
-
-    }
-
 }
