@@ -9,24 +9,66 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day15
 {
     public class Day15Solver : IProblemSolver
     {
-        public string Description => "Day 15";
+        public string Description => "Day 15: Beverage Bandits";
 
         public int SortOrder => 15;
 
         public void Solve()
         {
             Console.CursorVisible = false;
-            var input = File.ReadAllLines("Day15/Day15Test4.txt");
+            Part1();
+            Part2();
+            Console.CursorVisible = true;
+        }
+
+        private static void Part1()
+        {
+            var input = File.ReadAllLines("Day15/Day15Input.txt");
             var map = Map.Parse(input);
-            map.ToConsole(0, 0);
+
+            Console.WriteLine($"Part 1 - simulating battle...");
 
             while (map.Step(false)) ;
 
-            map.ToConsole(0, 0);
-
             map.PrintStats();
-            Console.CursorVisible = true;
         }
+
+        private void Part2()
+        {
+            int boost = 1;
+            Console.WriteLine("Part 2 - seeking min boost...");
+
+            //Do NOT try to use binary search here - cost me several hours only to find that at boost 13, elves all survive, but at 14, the goblins take one of them out again >_<
+            while (true)
+            {
+                if (AnyElvesLost(boost))
+                    boost++;
+                else
+                    break;
+            }
+
+            Console.WriteLine($"Optimal boost: {boost}");
+        }
+
+        private bool AnyElvesLost(int boost)
+        {
+            var input = File.ReadAllLines("Day15/Day15Input.txt");
+            var map = Map.Parse(input);
+            map.ApplyElfBonus(boost);
+            while (map.Step(false)) ;
+
+            if (!map.Actors.Any(p => p.Kind == 'E' && p.Health < 0))
+            {
+                Console.WriteLine($"With a boost of {boost}, every elf survives the battle. Board score: {map.GetScore()}.");
+                return false;
+            }
+            else
+            {
+                Console.WriteLine($"With a boost of {boost}, {map.Actors.Where(p => p.Kind == 'E').Where(p => p.Health < 0).Count()} elves died :(");
+                return true;
+            }
+        }
+
     }
 
     public class Map
@@ -37,7 +79,7 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day15
         public long StepCount { get; private set; }
 
         public static Map Parse(string[] mapLayout)
-    => new Map(mapLayout);
+            => new Map(mapLayout);
 
         private Map(string[] mapLayout)
         {
@@ -63,30 +105,50 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day15
                 Console.Clear();
                 ToConsole(0, 0);
             }
+            //var anyActorMoved = false;
+            //var anyActorAttacked = false;
+            var actorOrder = Actors.Where(p => p.Health >= 0)
+                .OrderBy(p => p.Position.Y)
+                .ThenBy(p => p.Position.X)
+                .ToList();
 
-            var actorOrder = Actors.Where(p => p.Health >= 0).OrderBy(p => p.Position.Y).ThenBy(p => p.Position.X).ToList();
             foreach (var actor in actorOrder)
             {
+                if (actor.Health <= 0) continue; //Dead elves tell no tales
+
                 if (verbose) actor.ToConsole(ConsoleColor.Yellow);
 
-                var enemies = actorOrder.Where(p => p.Kind != actor.Kind);
+                var enemies = actorOrder.Where(p => p.Kind != actor.Kind)
+                    .Where(p => p.Health >= 0);
+
+                if (enemies.Count() == 0)
+                    return false;
+
                 var hitEnemy = actor.AttackTargetAndReturn(enemies);
                 HandleAttack(hitEnemy);
 
                 if (hitEnemy == null)
                 {
                     var nextPosition = actor.GetIntendedMove(enemies, this);
-                    HandleMove(actor, nextPosition);
-
+                    if (nextPosition != null)
+                    {
+                        //anyActorMoved = true;
+                        HandleMove(actor, nextPosition);
+                    }
                     hitEnemy = actor.AttackTargetAndReturn(enemies);
+
                     HandleAttack(hitEnemy);
+                    //if (hitEnemy != null)
+                    //    anyActorAttacked = true;
                 }
+                //else
+                //    anyActorAttacked = true;
 
                 if (verbose) Thread.Sleep(50);
 
                 if (verbose) actor.ToConsole(ConsoleColor.Gray);
             }
-            return !Actors.GroupBy(p => p.Kind).Any(p => p.All(q => q.Health < 0));
+            return true; // anyActorAttacked || anyActorMoved; //!Actors.GroupBy(p => p.Kind).Any(p => p.All(q => q.Health < 0));
         }
 
         private void HandleMove(Actor actor, (int x, int y)? nextPosition)
@@ -110,9 +172,9 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day15
         {
             (Console.CursorTop, Console.CursorLeft) = (top, left);
 
-            foreach (var y in Enumerable.Range(0, Layout.GetLength(0)))
+            foreach (var y in Enumerable.Range(0, Layout.GetLength(1)))
             {
-                foreach (var x in Enumerable.Range(0, Layout.GetLength(1)))
+                foreach (var x in Enumerable.Range(0, Layout.GetLength(0)))
                 {
                     if (!omitGround || Layout[x, y] != '.')
                         Console.Write(Layout[x, y]);
@@ -123,86 +185,85 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day15
             }
         }
 
-        internal (int x, int y)? FindNextMove((int x, int y) start, char targetKind)
+        internal void PrintStats()
         {
+            Console.WriteLine($"Battle finished in {StepCount} steps.");
+            Console.WriteLine($"Scores are:");
+            foreach (var group in Actors.GroupBy(p => p.Kind))
+                Console.WriteLine($"{group.Key}: {group.Count(p => p.Health < 0)} dead, {group.Count(p => p.Health >= 0)} alive, for a board score of {group.Where(p => p.Health >= 0).Sum(p => p.Health) * (StepCount - 1)}");
+        }
 
-            int[,] outPaths = new int[Layout.GetLength(0), Layout.GetLength(1)];
-            int[,] inPaths = new int[Layout.GetLength(0), Layout.GetLength(1)];
+        public string GetScore()
+        {
+            var winners = Actors.GroupBy(p => p.Kind).Select(p => new { Kind = p.Key, Score = p.Where(q => q.Health >= 0).Sum(q => q.Health) })
+                .OrderByDescending(p => p.Score)
+                .First();
+            return $"{winners.Kind} win after {StepCount - 1} rounds with {winners.Score} total hit points, and a board score of {winners.Score * (StepCount - 1)}.";
+        }
+
+        internal int[,] GetDistances((int X, int Y) start)
+        {
+            int[,] distances = new int[Layout.GetLength(0), Layout.GetLength(1)];
             foreach (var c in
-               from x in Enumerable.Range(0, outPaths.GetLength(0))
-               from y in Enumerable.Range(0, outPaths.GetLength(1))
+               from x in Enumerable.Range(0, distances.GetLength(0))
+               from y in Enumerable.Range(0, distances.GetLength(1))
                select (x, y))
-                outPaths[c.x, c.y] = int.MaxValue;
+                distances[c.x, c.y] = int.MaxValue;
 
-            outPaths[start.x, start.y] = 0;
+            distances[start.X, start.Y] = 0;
 
             (int x, int y) current = default;
 
             var fringe = new List<(int x, int y)> { start };
+
             while (fringe.Any())
             {
                 current = fringe.First();
 
                 fringe.RemoveAt(0);
-                var dist = outPaths[current.x, current.y];
+                var dist = distances[current.x, current.y];
                 foreach (var candidate in new[] { (0, -1), (-1, 0), (1, 0), (0, 1) })
-                    if (new[] { targetKind, '.' }.Contains(Layout[current.x + candidate.Item1,
-                        current.y + candidate.Item2]))
+                    if (Layout[current.x + candidate.Item1, current.y + candidate.Item2] == '.')
                     {
-                        if (outPaths[current.x + candidate.Item1, current.y + candidate.Item2] != int.MaxValue)
+                        if (distances[current.x + candidate.Item1, current.y + candidate.Item2] != int.MaxValue)
                             continue;
-                        fringe.Add((current.x + candidate.Item1, current.y + candidate.Item2));
-                        outPaths[current.x + candidate.Item1, current.y + candidate.Item2] = dist + 1;
 
-                        if (Layout[current.x + candidate.Item1, current.y + candidate.Item2] == targetKind)
-                        {
-                            current = (current.x + candidate.Item1, current.y + candidate.Item2);
-                            fringe.Clear();
-                            break;
-                        }
+                        fringe.Add((current.x + candidate.Item1, current.y + candidate.Item2));
+                        distances[current.x + candidate.Item1, current.y + candidate.Item2] = dist + 1;
                     }
             }
 
-            if (Layout[current.x, current.y] != targetKind)
-                return null;
-
-            fringe.Add(current);
-            while (fringe.Any())
-            {
-                current = fringe.First();
-                fringe.RemoveAt(0);
-
-                inPaths[current.x, current.y] = outPaths[current.x, current.y];
-
-                foreach (var candidate in new[] { (0, -1), (-1, 0), (1, 0), (0, 1) })
-                    if (outPaths[current.x + candidate.Item1, current.y + candidate.Item2] < outPaths[current.x, current.y])
-                        fringe.Add((current.x + candidate.Item1, current.y + candidate.Item2));
-            }
-
-            current = start;
-            while (Layout[current.x, current.y] != targetKind)
-            {
-                if (inPaths[current.x, current.y - 1] > inPaths[current.x, current.y]) current = (current.x, current.y - 1);
-                else if (inPaths[current.x - 1, current.y] > inPaths[current.x, current.y]) current = (current.x - 1, current.y);
-                else if (inPaths[current.x + 1, current.y] > inPaths[current.x, current.y]) current = (current.x + 1, current.y);
-                else current = (current.x, current.y + 1);
-
-                return current;
-            }
-
-            return null;
+            return distances;
         }
 
-        internal void PrintStats()
+        internal IEnumerable<(int x, int y)> FindPath((int X, int Y) start, (int x, int y) target)
         {
-            Console.Clear();
-            ToConsole(0, 0);
-            (Console.CursorTop, Console.CursorLeft) = (Layout.GetLength(1) + 1, 0);
+            var returnDistances = GetDistances(target);
+            var position = start;
+            while (position != target)
+            {
+                yield return position;
+                var next = position;
+                var bestDist = Int32.MaxValue;
 
-            Console.WriteLine($"Current iteration is {StepCount}.");
-            Console.WriteLine($"Scores are:");
-            foreach (var group in Actors.GroupBy(p => p.Kind))
-                Console.WriteLine($"{group.Key}: {group.Count(p => p.Health < 0)} dead, {group.Count(p => p.Health >= 0)} alive, for a board score of {group.Where(p => p.Health >= 0).Sum(p => p.Health) * StepCount}");
+                foreach (var candidate in new[] { (0, 1), (1, 0), (-1, 0), (0, -1) })
+                    if (returnDistances[position.X + candidate.Item1, position.Y + candidate.Item2] <= returnDistances[next.X, next.Y])
+                    {
+                        next = (position.X + candidate.Item1, position.Y + candidate.Item2);
+                        bestDist = returnDistances[next.X, next.Y];
+                    }
+                if (next != position)
+                    position = next;
+                else
+                    throw new InvalidOperationException("No next move found!");
+            }
+            yield return target;
+        }
+
+        public void ApplyElfBonus(int boost)
+        {
+            foreach (var elf in Actors.Where(p => p.Kind == 'E'))
+                elf.ApplyAttackBoost(boost);
         }
     }
 
@@ -214,7 +275,7 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day15
         public (int X, int Y) Position { get; set; }
         public char Kind { get; }
         public int Health { get; set; } = 200;
-        public int Attack => 3;
+        public int Attack { get; private set; } = 3;
 
         public override string ToString()
             => $"{Kind}({Health})";
@@ -231,20 +292,13 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day15
         public bool InRange(Actor other)
             => Math.Abs(other.Position.X - Position.X) + Math.Abs(other.Position.Y - Position.Y) == 1;
 
-        internal (int x, int y)? GetAttackLocation(char[,] layout)
-        {
-            if (layout[Position.X, Position.Y - 1] == '.') return (Position.X, Position.Y - 1);
-            if (layout[Position.X - 1, Position.Y] == '.') return (Position.X - 1, Position.Y);
-            if (layout[Position.X + 1, Position.Y] == '.') return (Position.X + 1, Position.Y);
-            if (layout[Position.X, Position.Y + 1] == '.') return (Position.X, Position.Y + 1);
-            return null;
-        }
-
         internal Actor AttackTargetAndReturn(IEnumerable<Actor> enemies)
         {
             var inRangeTarget = enemies
                 .Where(p => p.InRange(this))
                 .OrderBy(p => p.Health)
+                .ThenBy(p => p.Position.Y)
+                .ThenBy(p => p.Position.X)
                 .FirstOrDefault();
 
             if (inRangeTarget == null)
@@ -255,6 +309,33 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day15
         }
 
         public (int x, int y)? GetIntendedMove(IEnumerable<Actor> enemies, Map map)
-            => map.FindNextMove(Position, Kind == 'E' ? 'G' : 'E');
+        {
+            var distances = map.GetDistances(Position);
+
+            var intendedTarget = enemies.SelectMany(p => p.AttackLocations(map.Layout))
+                .OrderBy(p => distances[p.x, p.y])
+                .ThenBy(p => p.y)
+                .ThenBy(p => p.x)
+                .Cast<(int x, int y)?>()
+                .FirstOrDefault();
+
+            if (intendedTarget == null || distances[intendedTarget.Value.x, intendedTarget.Value.y] == int.MaxValue)
+                return null;
+
+            return map.FindPath(Position, intendedTarget.Value).Skip(1).First();
+        }
+
+        private IEnumerable<(int x, int y)> AttackLocations(char[,] layout)
+        {
+            if (layout[Position.X, Position.Y - 1] == '.') yield return (Position.X, Position.Y - 1);
+            if (layout[Position.X - 1, Position.Y] == '.') yield return (Position.X - 1, Position.Y);
+            if (layout[Position.X + 1, Position.Y] == '.') yield return (Position.X + 1, Position.Y);
+            if (layout[Position.X, Position.Y + 1] == '.') yield return (Position.X, Position.Y + 1);
+        }
+
+        internal void ApplyAttackBoost(int boost)
+        {
+            Attack += boost;
+        }
     }
 }

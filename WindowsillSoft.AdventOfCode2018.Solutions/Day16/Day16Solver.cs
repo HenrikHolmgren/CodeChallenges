@@ -44,8 +44,8 @@ namespace WindowsillSoft.AdventOfCode2018.Solutions.Day16
             var opCodeMap = BuildInstructionMap(input);
             var program = GetProgram("Day16/Day16InputB.txt");
             var state = new RegisterState();
-            foreach (var instruction in program)
-                state = opCodeMap[instruction.OpCode].DoWork(state, instruction.Par);
+            foreach (var (OpCode, Parameter) in program)
+                state = opCodeMap[OpCode].DoWork(state, Parameter);
 
             Console.WriteLine($"State after program execution: {state}");
         }
