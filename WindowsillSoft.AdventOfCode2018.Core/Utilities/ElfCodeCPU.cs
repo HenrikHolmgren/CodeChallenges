@@ -43,6 +43,9 @@ namespace WindowsillSoft.AdventOfCode2018.Core.Utilities
 
         public long ExecutedInstructions => _instructionCount;
 
+        public bool IsHalted
+            => ProgramCounter >= _program.Length;
+
         private string Describe(Operation op)
         {
             switch (op.OpCode)
@@ -70,11 +73,11 @@ namespace WindowsillSoft.AdventOfCode2018.Core.Utilities
         public int[] Execute()
         {
             while (ProgramCounter < _program.Length)
-                Step(false);
+                Step();
             return _registers;
         }
 
-        public int[] Step(bool verbose = false)
+        public int[] StepVerbose()
         {
             if (ProgramCounter >= _program.Length)
             {
@@ -84,8 +87,8 @@ namespace WindowsillSoft.AdventOfCode2018.Core.Utilities
 
             _instructionCount++;
 
-            if (verbose)
-                Console.WriteLine(ProgramCounter + ": " + Describe(_program[ProgramCounter]));
+            Console.WriteLine(ProgramCounter + ": " + Describe(_program[ProgramCounter]));
+
             switch (_program[ProgramCounter].OpCode)
             {
                 case Ops.addr: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] + _registers[_program[ProgramCounter].Parameters[1]]; break;
@@ -106,8 +109,36 @@ namespace WindowsillSoft.AdventOfCode2018.Core.Utilities
                 case Ops.eqrr: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] == _registers[_program[ProgramCounter].Parameters[1]] ? 1 : 0; break;
             }
             _registers[(int)_programCounterReg]++;
-            if (verbose)
-                Console.WriteLine($"  -> [{String.Join(" ", _registers)}]");
+
+            Console.WriteLine($"  -> [{String.Join(" ", _registers)}]");
+            return _registers;
+        }
+
+        public int[] Step()
+        {
+            _instructionCount++;
+
+            switch (_program[ProgramCounter].OpCode)
+            {
+                case Ops.addr: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] + _registers[_program[ProgramCounter].Parameters[1]]; break;
+                case Ops.addi: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] + _program[ProgramCounter].Parameters[1]; break;
+                case Ops.mulr: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] * _registers[_program[ProgramCounter].Parameters[1]]; break;
+                case Ops.muli: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] * _program[ProgramCounter].Parameters[1]; break;
+                case Ops.banr: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] & _registers[_program[ProgramCounter].Parameters[1]]; break;
+                case Ops.bani: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] & _program[ProgramCounter].Parameters[1]; break;
+                case Ops.borr: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] | _registers[_program[ProgramCounter].Parameters[1]]; break;
+                case Ops.bori: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] | _program[ProgramCounter].Parameters[1]; break;
+                case Ops.setr: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]]; break;
+                case Ops.seti: _registers[_program[ProgramCounter].Parameters[2]] = _program[ProgramCounter].Parameters[0]; break;
+                case Ops.gtir: _registers[_program[ProgramCounter].Parameters[2]] = _program[ProgramCounter].Parameters[0] > _registers[_program[ProgramCounter].Parameters[1]] ? 1 : 0; break;
+                case Ops.gtri: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] > _program[ProgramCounter].Parameters[1] ? 1 : 0; break;
+                case Ops.gtrr: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] > _registers[_program[ProgramCounter].Parameters[1]] ? 1 : 0; break;
+                case Ops.eqir: _registers[_program[ProgramCounter].Parameters[2]] = _program[ProgramCounter].Parameters[0] == _registers[_program[ProgramCounter].Parameters[1]] ? 1 : 0; break;
+                case Ops.eqri: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] == _program[ProgramCounter].Parameters[1] ? 1 : 0; break;
+                case Ops.eqrr: _registers[_program[ProgramCounter].Parameters[2]] = _registers[_program[ProgramCounter].Parameters[0]] == _registers[_program[ProgramCounter].Parameters[1]] ? 1 : 0; break;
+            }
+
+            _registers[(int)_programCounterReg]++;
             return _registers;
         }
         public struct Operation

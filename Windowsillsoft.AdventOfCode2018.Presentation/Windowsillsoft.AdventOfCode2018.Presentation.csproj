@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WindowsillSoft.AdventOfCode2018.Core\WindowsillSoft.AdventOfCode2018.Core.csproj" />
-    <ProjectReference Include="..\WindowsillSoft.AdventOfCode2018.Solutions\WindowsillSoft.AdventOfCode2018.Solutions.csproj" />    
+    <ProjectReference Include="..\WindowsillSoft.AdventOfCode2018\WindowsillSoft.AdventOfCode2018.csproj" />    
   </ItemGroup>
 
 </Project>

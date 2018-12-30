@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using WindowsillSoft.AdventOfCode2018.Inputs;
+using WindowsillSoft.AdventOfCode2018.Solutions.Day10;
+using Xunit;
+
+namespace WindowsillSoft.AdventOfCode2018.Tests.AdventOfCode2018.Solutions
+{
+  public  class Day10Test
+    {
+        [Theory]
+        [InlineData(Day10Input.Test1Input, Day10Input.Part1Test1Result)]
+        public void Part1(string input, string result)
+        {
+            var test = new Day10Solver();
+            test.Initialize(input);
+            Assert.Equal(result, test.SolvePart1());
+        }
+
+        [Theory]
+        [InlineData(Day10Input.Test1Input, Day10Input.Part2Test1Result)]
+        public void Part2(string input, string result)
+        {
+            var test = new Day10Solver();
+            test.Initialize(input);
+            Assert.Equal(result, test.SolvePart2());
+        }
+
+        [Fact]
+        public void FullRunPart1()
+        {
+            var test = new Day10Solver();
+            test.Initialize(Day10Input.FullRunInput);
+            Assert.Equal(Day10Input.Part1FullRunOutput, test.SolvePart1());
+        }
+
+        [Fact]
+        public void FullRunPart2()
+        {
+            var test = new Day10Solver();
+            test.Initialize(Day10Input.FullRunInput);
+            Assert.Equal(Day10Input.Part2FullRunOutput, test.SolvePart2());
+        }
+    }
+}
