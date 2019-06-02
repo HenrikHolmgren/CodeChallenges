@@ -9,5 +9,8 @@ namespace WindowsillSoft.CodeChallenges.ProjectEuler._1_100
     public abstract class ProjectEuler1_to_100SolverBase : ProjectEulerSolverBase
     {
         public ProjectEuler1_to_100SolverBase(IIOProvider provider) : base(provider) { }
+
+        public override void Initialize() { }
+        public override string Name => GetType().Name;        
     }
 }

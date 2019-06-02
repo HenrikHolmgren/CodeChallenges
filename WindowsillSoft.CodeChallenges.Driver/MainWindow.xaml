@@ -47,7 +47,7 @@
         <ListView ItemsSource="{Binding SelectedCategory.Solvers}"  Grid.Column="2" HorizontalAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid HorizontalAlignment="Stretch">
                         <Grid.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ExecuteCommand }"/>
                         </Grid.InputBindings>
