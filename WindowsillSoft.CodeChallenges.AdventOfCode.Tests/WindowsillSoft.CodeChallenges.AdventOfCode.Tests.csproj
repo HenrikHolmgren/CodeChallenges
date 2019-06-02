@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.10.1" />
+    <PackageReference Include="nunit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WindowsillSoft.CodeChallenges.AdventOfCode\WindowsillSoft.CodeChallenges.AdventOfCode.csproj" />
+    <ProjectReference Include="..\WindowsillSoft.CodeChallenges.Core\WindowsillSoft.CodeChallenges.Core.csproj" />
+  </ItemGroup>
+
+</Project>

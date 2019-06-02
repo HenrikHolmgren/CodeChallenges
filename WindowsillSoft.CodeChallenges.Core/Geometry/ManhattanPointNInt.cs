@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace WindowsillSoft.CodeChallenges.Core.Geometry
 {
     public struct ManhattanPointNInt
     {
-        int[] _coordinates;
+        private readonly int[] _coordinates;
+
+        public int Length
+            => _coordinates.Sum(p => Math.Abs(p));
+
         public ManhattanPointNInt(int[] coordinates)
             => _coordinates = coordinates;
-
 
         public int Distance(ManhattanPointNInt other)
             => _coordinates.Zip(other._coordinates, (p, q) => Math.Abs(p - q)).Sum();
@@ -25,10 +26,12 @@ namespace WindowsillSoft.CodeChallenges.Core.Geometry
                     Min = Math.Min(p, q)
                 }).ToArray();
 
-            for (int i = 0; i < _coordinates.Length; i++)
+            for (var i = 0; i < _coordinates.Length; i++)
             {
-                if (_coordinates[i] > maxMin[i].Max) d += _coordinates[i] - maxMin[i].Max;
-                if (_coordinates[i] < maxMin[i].Min) d += _coordinates[i] - maxMin[i].Min;
+                if (_coordinates[i] > maxMin[i].Max)
+                    d += _coordinates[i] - maxMin[i].Max;
+                if (_coordinates[i] < maxMin[i].Min)
+                    d += _coordinates[i] - maxMin[i].Min;
             }
             return d;
         }
@@ -48,7 +51,7 @@ namespace WindowsillSoft.CodeChallenges.Core.Geometry
 
         public override int GetHashCode()
         {
-            int prime = 17;
+            var prime = 17;
             return _coordinates.Aggregate(prime, (p, q) => p * prime + q);
         }
 
@@ -63,8 +66,12 @@ namespace WindowsillSoft.CodeChallenges.Core.Geometry
 
         public static bool operator ==(ManhattanPointNInt a, ManhattanPointNInt b)
         {
-            for (int i = 0; i < a._coordinates.Length; i++)
-                if (a._coordinates[i] != b._coordinates[i]) return false;
+            for (var i = 0; i < a._coordinates.Length; i++)
+            {
+                if (a._coordinates[i] != b._coordinates[i])
+                    return false;
+            }
+
             return true;
         }
 
@@ -73,10 +80,12 @@ namespace WindowsillSoft.CodeChallenges.Core.Geometry
 
         public static bool operator <(ManhattanPointNInt a, ManhattanPointNInt b)
         {
-            for (int i = 0; i < a._coordinates.Length; i++)
+            for (var i = 0; i < a._coordinates.Length; i++)
             {
-                if (a._coordinates[i] < b._coordinates[i]) return true;
-                if (a._coordinates[i] > b._coordinates[i]) return false;
+                if (a._coordinates[i] < b._coordinates[i])
+                    return true;
+                if (a._coordinates[i] > b._coordinates[i])
+                    return false;
             }
             return false;
         }
@@ -87,5 +96,9 @@ namespace WindowsillSoft.CodeChallenges.Core.Geometry
             => a == b || a < b;
         public static bool operator >=(ManhattanPointNInt a, ManhattanPointNInt b)
             => b <= a;
+
+        public override string ToString()
+            => $"<{String.Join(", ", _coordinates)}>";
+
     }
 }
