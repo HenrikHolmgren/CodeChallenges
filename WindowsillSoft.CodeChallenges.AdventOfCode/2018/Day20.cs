@@ -45,21 +45,8 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
         public override string ExecutePart1()
         {
-            //if (!silent)
-            //{
-            //    Console.CursorVisible = false;
-
-            //    Console.Clear();
-            //    WriteMaze(_maze);
-            //}
-
             var (distances, finalLocation) = SolveMaze();
-            //if (!silent)
-            //{
-            //    Console.CursorTop = _maze.Max(p => p.Key.y) + 1;
-            //    Console.WriteLine($"Explortation stopped at {finalLocation} with distance {distances[finalLocation.x, finalLocation.y] - 1}.");
-            //    Console.CursorVisible = true;
-            //}
+
             IO.LogIfAttached(() => $"Explortation stopped at {finalLocation} with distance {distances[finalLocation.x, finalLocation.y] - 1}.");
 
             return (distances[finalLocation.x, finalLocation.y] - 1).ToString();
@@ -112,12 +99,6 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
                     distances[location.x - 1, location.y] = distances[location.x, location.y] + 1;
                     fringe.Add((probe.x - 1, probe.y));
                 }
-
-                //if (!silent)
-                //{
-                //    (Console.CursorLeft, Console.CursorTop) = (location.x, location.y);
-                //    Console.WriteLine(distances[location.x, location.y] % 10);
-                //}
             }
             return (distances, location);
         }
@@ -156,25 +137,14 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
         private (int x, int y) HandleNavigationDirection(Dictionary<(int, int), Direction> maze, (int x, int y) currentLocation, char command)
         {
-            (int x, int y) nextLocation;
-            switch (command)
+            var nextLocation = command switch
             {
-                case 'N':
-                    nextLocation = (currentLocation.x, currentLocation.y - 1);
-                    break;
-                case 'S':
-                    nextLocation = (currentLocation.x, currentLocation.y + 1);
-                    break;
-                case 'E':
-                    nextLocation = (currentLocation.x + 1, currentLocation.y);
-                    break;
-                case 'W':
-                    nextLocation = (currentLocation.x - 1, currentLocation.y);
-                    break;
-                default:
-                    throw new InvalidOperationException($"Unknown command '{command}' found while navigating");
-            }
-
+                'N' => (currentLocation.x, currentLocation.y - 1),
+                'S' => (currentLocation.x, currentLocation.y + 1),
+                'E' => (currentLocation.x + 1, currentLocation.y),
+                'W' => (currentLocation.x - 1, currentLocation.y),
+                _ => throw new InvalidOperationException($"Unknown command '{command}' found while navigating"),
+            };
             if (!maze.ContainsKey(nextLocation))
                 maze[nextLocation] = Direction.None;
 
@@ -244,33 +214,22 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
         {
             switch (index)
             {
-                case 0:
-                    A = value;
-                    break;
-                case 1:
-                    B = value;
-                    break;
-                case 2:
-                    C = value;
-                    break;
-                default:
-                    throw new IndexOutOfRangeException();
+                case 0: A = value; break;
+                case 1: B = value; break;
+                case 2: C = value; break;
+                default: throw new IndexOutOfRangeException();
             }
         }
 
         private int GetValue(int index)
         {
-            switch (index)
+            return index switch
             {
-                case 0:
-                    return A;
-                case 1:
-                    return B;
-                case 2:
-                    return C;
-                default:
-                    throw new IndexOutOfRangeException();
-            }
+                0 => A,
+                1 => B,
+                2 => C,
+                _ => throw new IndexOutOfRangeException(),
+            };
         }
 
         public override string ToString()
@@ -299,48 +258,28 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
         {
             switch (index)
             {
-                case 0:
-                    R0 = value;
-                    break;
-                case 1:
-                    R1 = value;
-                    break;
-                case 2:
-                    R2 = value;
-                    break;
-                case 3:
-                    R3 = value;
-                    break;
-                case 4:
-                    R4 = value;
-                    break;
-                case 5:
-                    R5 = value;
-                    break;
-                default:
-                    throw new IndexOutOfRangeException();
+                case 0: R0 = value; break;
+                case 1: R1 = value; break;
+                case 2: R2 = value; break;
+                case 3: R3 = value; break;
+                case 4: R4 = value; break;
+                case 5: R5 = value; break;
+                default: throw new IndexOutOfRangeException();
             }
         }
 
         private int GetValue(int index)
         {
-            switch (index)
+            return index switch
             {
-                case 0:
-                    return R0;
-                case 1:
-                    return R1;
-                case 2:
-                    return R2;
-                case 3:
-                    return R3;
-                case 4:
-                    return R4;
-                case 5:
-                    return R5;
-                default:
-                    throw new IndexOutOfRangeException();
-            }
+                0 => R0,
+                1 => R1,
+                2 => R2,
+                3 => R3,
+                4 => R4,
+                5 => R5,
+                _ => throw new IndexOutOfRangeException(),
+            };
         }
 
         public RegisterState WithValue(int value, int index)

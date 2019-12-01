@@ -18,7 +18,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
         {
             var matcher = new Regex(@"pos=<(?'x'-?\d+),(?'y'-?\d+),(?'z'-?\d+)>, r=(?'r'\d+)", RegexOptions.Compiled);
 
-            _drones = input.Split('\n')
+            _drones = ReadAndSplitInput<string>(input)
              .Select(p => matcher.Match(p))
              .Select(p => new Drone(
                  int.Parse(p.Groups["x"].Value),

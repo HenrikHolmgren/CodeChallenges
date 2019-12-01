@@ -15,7 +15,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
         public override void Initialize(string input)
         {
-            _input = input.Split('\n').Select(p => int.Parse(p)).ToArray();
+            _input = ReadAndSplitInput<int>(input).ToArray();
         }
 
         public override string ExecutePart1()

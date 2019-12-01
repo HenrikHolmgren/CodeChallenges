@@ -1,11 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 using WindowsillSoft.CodeChallenges.AdventOfCode;
 using WindowsillSoft.CodeChallenges.Core;
 using WindowsillSoft.CodeChallenges.Driver.Models;
@@ -31,51 +39,50 @@ namespace WindowsillSoft.CodeChallenges.Driver
             InitializeComponent();
             var uiProvider = new DelegateGUIIOProvider(_ => { }, Dispatcher.Invoke);
             MainPanel.DataContext = new MainWindowVM(uiProvider);
-
         }
-    }
 
-    public class MainWindowVM : INotifyPropertyChanged
-    {
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public ObservableCollection<SolverCategoryVM> Solvers { get; }
-
-
-        private SolverCategoryVM? _selectedCategory;
-        public SolverCategoryVM? SelectedCategory
+        public class MainWindowVM : INotifyPropertyChanged
         {
-            get => _selectedCategory;
-            set
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public ObservableCollection<SolverCategoryVM> Solvers { get; }
+
+
+            private SolverCategoryVM? _selectedCategory;
+            public SolverCategoryVM? SelectedCategory
             {
-                _selectedCategory = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedCategory)));
+                get => _selectedCategory;
+                set
+                {
+                    _selectedCategory = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedCategory)));
+                }
             }
-        }
 
-        public ICommand UpdateSelection { get; }
+            public ICommand UpdateSelection { get; }
 
-        public MainWindowVM(IIOProvider iOProvider)
-        {
+            public MainWindowVM(IIOProvider iOProvider)
+            {
 
-            var allSolvers = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(p => p.GetExportedTypes())
-                .Where(p => typeof(ProblemSolverBase).IsAssignableFrom(p))
-                .ToList();
+                var allSolvers = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(p => p.GetExportedTypes())
+                    .Where(p => typeof(ProblemSolverBase).IsAssignableFrom(p))
+                    .ToList();
 
-            var roots = allSolvers.Where(p => p.IsGenericType && p.GetGenericTypeDefinition() == typeof(ProblemSolverBase<>));
+                var roots = allSolvers.Where(p => p.IsGenericType && p.GetGenericTypeDefinition() == typeof(ProblemSolverBase<>));
 
-            Solvers = new ObservableCollection<SolverCategoryVM>(
-                roots.Select(p => new SolverCategoryVM(p, allSolvers.ToLookup(q => q.GetAnnotatedBase<SolverCategoryAttribute>()), iOProvider)));
+                Solvers = new ObservableCollection<SolverCategoryVM>(
+                    roots.Select(p => new SolverCategoryVM(p, allSolvers.ToLookup(q => q.GetAnnotatedBase<SolverCategoryAttribute>()), iOProvider)));
 
-            UpdateSelection = new SyncCommand<SolverCategoryVM>(SetSelection);
-        }
-                
-        private void SetSelection(SolverCategoryVM solver)
-        {
-            if (solver.Solvers.Any())
-                SelectedCategory = solver;
+                UpdateSelection = new SyncCommand<SolverCategoryVM>(SetSelection);
+            }
+
+            private void SetSelection(SolverCategoryVM solver)
+            {
+                if (solver.Solvers.Any())
+                    SelectedCategory = solver;
+            }
         }
     }
 
@@ -84,7 +91,7 @@ namespace WindowsillSoft.CodeChallenges.Driver
         public static Type GetAnnotatedBase<T>(this Type type) where T : Attribute
         {
             var res = type.BaseType;
-            while (res != typeof(object) && !res.GetCustomAttributes(false).All(p => p is T))
+            while (res != typeof(object) && !res.GetCustomAttributes(false).Any(p => p is T))
                 res = res.BaseType;
             return res;
         }

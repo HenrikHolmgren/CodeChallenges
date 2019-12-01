@@ -19,7 +19,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
         {
             var matcher = new Regex(@"position=<(?'x'[^,]*),(?'y'[^>]*)> velocity=<(?'vx'[^,]*),(?'vy'[^>]*)>", RegexOptions.Compiled);
 
-            _stars = input.Split('\n')
+            _stars = ReadAndSplitInput<string>(input)
                 .Select(p => matcher.Match(p))
                 .Select(p => new Star
                 {

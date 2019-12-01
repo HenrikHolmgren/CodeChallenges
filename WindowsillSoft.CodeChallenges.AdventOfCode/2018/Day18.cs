@@ -16,7 +16,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
         public override void Initialize(string input)
         {
-            var mapLines = input.Split('\n');
+            var mapLines = ReadAndSplitInput<string>(input).ToArray();
             _map = new char[mapLines[0].Length, mapLines.Length];
             for (int y = 0; y < mapLines.Length; y++)
                 for (int x = 0; x < mapLines[0].Length; x++)

@@ -18,7 +18,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
         public override void Initialize(string input)
         {
-            var inputLines = input.Split('\n')
+            var inputLines = ReadAndSplitInput<string>(input)
                 .Select(p => p.Split(':')[1])
                 .ToArray();
 
@@ -128,16 +128,13 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
         public char Map(int val)
         {
-            switch (val % 3)
+            return (val % 3) switch
             {
-                case 0:
-                    return '.';
-                case 1:
-                    return '=';
-                case 2:
-                    return '|';
-            }
-            return '?';
+                0 => '.',
+                1 => '=',
+                2 => '|',
+                _ => '?',
+            };
         }
         public enum Tool
         {

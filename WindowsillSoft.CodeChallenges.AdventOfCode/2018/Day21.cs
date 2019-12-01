@@ -23,7 +23,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
         public override void Initialize(string input)
         {
-            var inputLines = input.Split('\n');
+            var inputLines = ReadAndSplitInput<string>(input).ToArray();
             _instructionPointer = (ElfCodeMachine.Register)int.Parse(inputLines[0].Split()[1]);
             _instructions = inputLines.Skip(1)
                 .Select(p => p.Split())
@@ -134,12 +134,12 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
                 new Opcode("eqri", (reg, par) => { /*Console.WriteLine($"R{par.C} <- R{par.A}={par.B}"); */return reg.WithValue(reg[par.A] == par.B ? 1 : 0, par.C); }),
                 new Opcode("eqrr", (reg, par) => { /*Console.WriteLine($"R{par.C} <- R{par.A}=R{par.B}"); */return reg.WithValue(reg[par.A] == reg[par.B] ? 1 : 0, par.C); }),
             }.ToDictionary(p => p.Name);
-    }
+        }
 
-    public void Initialize(object fullRunInput)
-    {
-        throw new NotImplementedException();
+        public void Initialize(object fullRunInput)
+        {
+            throw new NotImplementedException();
+        }
     }
-}
 }
 

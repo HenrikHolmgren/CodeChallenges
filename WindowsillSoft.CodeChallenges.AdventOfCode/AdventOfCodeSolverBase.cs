@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using WindowsillSoft.CodeChallenges.Core;
 using WindowsillSoft.CodeChallenges.Core.Extensions;
 
@@ -39,6 +41,13 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode
         public abstract void Initialize(string input);
         public abstract string ExecutePart1();
         public abstract string ExecutePart2();
+
+        protected IEnumerable<T> ReadAndSplitInput<T>(string input)
+            => input.Split()
+            .Select(p => p.Trim())
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .Select(p => Convert.ChangeType(p, typeof(T)))
+            .Cast<T>();
     }
 
     public class AdventOfCodeResult
@@ -55,5 +64,9 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode
             Part1Time = part1Time;
             Part2Time = part2Time;
         }
+
+        public override string? ToString() => $"AoC result set:" + Environment.NewLine +
+            $"Part 1 ({Part1Time.TotalSeconds}s): {Part1Result}" + Environment.NewLine +
+            $"Part 2 ({Part2Time.TotalSeconds}s): {Part2Result}";
     }
 }

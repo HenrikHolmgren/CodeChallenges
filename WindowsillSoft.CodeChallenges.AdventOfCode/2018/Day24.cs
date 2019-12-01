@@ -21,7 +21,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
             _allUnits = new List<UnitMob>();
 
             string currentFaction = "Unknown";
-            foreach (var line in input.Split('\n'))
+            foreach (var line in ReadAndSplitInput<string>(input))
             {
                 if (line.EndsWith(":"))
                     currentFaction = line.TrimEnd(':');

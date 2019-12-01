@@ -14,10 +14,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
         public override void Initialize(string input)
         {
-            var numericInputs = input
-                .Split(" ")
-                .Select(p => int.Parse(p))
-                .ToArray();
+            var numericInputs = ReadAndSplitInput<int>(input).ToArray();
 
             _tree = new Tree(numericInputs, 0);
         }

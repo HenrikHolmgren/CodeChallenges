@@ -16,8 +16,8 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
         public override void Initialize(string input)
         {
-            var patterns = input.Split('\n');
-            _initialState = patterns[0];
+            var patterns = ReadAndSplitInput<string>(input);
+            _initialState = patterns.First();
             _livePatterns = new HashSet<string>(patterns.Skip(1));
         }
 

@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -62,7 +61,7 @@ namespace WindowsillSoft.CodeChallenges.Driver
         private string? GetFileContentInternal(string header)
         {
             var dialog = new OpenFileDialog() { Title = header };
-            if (dialog.ShowDialog() ?? false)
+            if (dialog.ShowDialog() == DialogResult.OK)
                 return File.ReadAllText(dialog.FileName);
             return null;
         }

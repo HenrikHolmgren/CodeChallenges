@@ -16,7 +16,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
         public override void Initialize(string input)
         {
-            var inputLines = input.Split('\n');
+            var inputLines = ReadAndSplitInput<string>(input).ToArray();
             _instructionPointer = (ElfCodeMachine.Register)int.Parse(inputLines[0].Split()[1]);
             _instructions = inputLines.Skip(1)
                 .Select(p => p.Split())

@@ -16,7 +16,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
         public override void Initialize(string input)
         {
-            _anomalies = input.Split('\n')
+            _anomalies = ReadAndSplitInput<string>(input)
                 .Select(p => p.Split(',').Select(q => int.Parse(q)).ToArray())
                 .Select(p => new ManhattanPointNInt(p))
                 .ToArray();

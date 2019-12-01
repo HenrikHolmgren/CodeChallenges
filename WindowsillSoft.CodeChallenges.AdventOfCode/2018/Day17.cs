@@ -19,7 +19,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
         public override void Initialize(string input)
         {
             var parser = new Regex(@"(?'c1'[x|y])=(?'v1'\d+), (?'c2'[x|y])=(?'v2a'\d+)\.\.(?'v2b'\d+)", RegexOptions.Compiled);
-            var lines = input.Split('\n')
+            var lines = ReadAndSplitInput<string>(input)
                 .Select(p => parser.Match(p))
                 .Select(p => new
                 {

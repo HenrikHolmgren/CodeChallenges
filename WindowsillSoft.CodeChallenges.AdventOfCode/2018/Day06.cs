@@ -22,7 +22,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
                 distanceThreshold = IO.RequestInput("Distance threshold?");
             } while (distanceThreshold == default || !Int32.TryParse(distanceThreshold, out _distanceThreshold));
             
-            _coordinates = input.Split('\n')
+            _coordinates = ReadAndSplitInput<string>(input)
                 .Select(p => p.Split(",").Select(q => int.Parse(q)).ToArray())
                 .Select(p => new Coordinate(p[0], p[1])).ToList();
         }

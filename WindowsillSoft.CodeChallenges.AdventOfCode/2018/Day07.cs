@@ -35,7 +35,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 
             var matcher = new Regex(@"Step (?'from'.) must be finished before step (?'to'.) can begin.");
 
-            _edges = input.Split('\n')
+            _edges = ReadAndSplitInput<string>(input)
                 .Select(p => matcher.Match(p))
                 .Select(p => new Edge(p.Groups["from"].Value[0], p.Groups["to"].Value[0]))
                 .ToArray();

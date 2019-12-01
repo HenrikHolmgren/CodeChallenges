@@ -48,42 +48,26 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018.Common
 
         private string Describe(Operation op)
         {
-            switch (op.OpCode)
+            return op.OpCode switch
             {
-                case Ops.addr:
-                    return $"ADDR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} + {(Register)op.Parameters[1]}";
-                case Ops.addi:
-                    return $"ADDI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} + {op.Parameters[1]}";
-                case Ops.mulr:
-                    return $"MULR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} * {(Register)op.Parameters[1]}";
-                case Ops.muli:
-                    return $"MULI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} * {op.Parameters[1]}";
-                case Ops.banr:
-                    return $"BANR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} & {(Register)op.Parameters[1]}";
-                case Ops.bani:
-                    return $"BANI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} & {op.Parameters[1]}";
-                case Ops.borr:
-                    return $"BORR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} | {(Register)op.Parameters[1]}";
-                case Ops.bori:
-                    return $"BORI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} | {op.Parameters[1]}";
-                case Ops.setr:
-                    return $"SETR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]}";
-                case Ops.seti:
-                    return $"SETI; {(Register)op.Parameters[2]} <- {op.Parameters[0]} ";
-                case Ops.gtir:
-                    return $"GTIR; {(Register)op.Parameters[2]} <- {op.Parameters[0]} > {(Register)op.Parameters[1]}";
-                case Ops.gtri:
-                    return $"GTRI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} > {op.Parameters[1]}";
-                case Ops.gtrr:
-                    return $"GTRR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} > {(Register)op.Parameters[1]}";
-                case Ops.eqir:
-                    return $"EQIR; {(Register)op.Parameters[2]} <- {op.Parameters[0]} = {(Register)op.Parameters[1]}";
-                case Ops.eqri:
-                    return $"EQRI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} = {op.Parameters[1]}";
-                case Ops.eqrr:
-                    return $"EQRR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} = {(Register)op.Parameters[1]}";
-            }
-            return "UNKNOWN OPCODE " + op.OpCode;
+                Ops.addr => $"ADDR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} + {(Register)op.Parameters[1]}",
+                Ops.addi => $"ADDI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} + {op.Parameters[1]}",
+                Ops.mulr => $"MULR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} * {(Register)op.Parameters[1]}",
+                Ops.muli => $"MULI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} * {op.Parameters[1]}",
+                Ops.banr => $"BANR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} & {(Register)op.Parameters[1]}",
+                Ops.bani => $"BANI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} & {op.Parameters[1]}",
+                Ops.borr => $"BORR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} | {(Register)op.Parameters[1]}",
+                Ops.bori => $"BORI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} | {op.Parameters[1]}",
+                Ops.setr => $"SETR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]}",
+                Ops.seti => $"SETI; {(Register)op.Parameters[2]} <- {op.Parameters[0]} ",
+                Ops.gtir => $"GTIR; {(Register)op.Parameters[2]} <- {op.Parameters[0]} > {(Register)op.Parameters[1]}",
+                Ops.gtri => $"GTRI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} > {op.Parameters[1]}",
+                Ops.gtrr => $"GTRR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} > {(Register)op.Parameters[1]}",
+                Ops.eqir => $"EQIR; {(Register)op.Parameters[2]} <- {op.Parameters[0]} = {(Register)op.Parameters[1]}",
+                Ops.eqri => $"EQRI; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} = {op.Parameters[1]}",
+                Ops.eqrr => $"EQRR; {(Register)op.Parameters[2]} <- {(Register)op.Parameters[0]} = {(Register)op.Parameters[1]}",
+                _ => "UNKNOWN OPCODE " + op.OpCode,
+            };
         }
 
         public int[] Execute()

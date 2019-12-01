@@ -19,8 +19,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
             var matcher = new Regex(@"#(?'id'\d+)\s+@\s+(?'x'\d+),(?'y'\d+):\s+(?'width'\d+)x(?'height'\d+)",
                 RegexOptions.Compiled);
 
-            _claims = input
-                .Split('\n')
+            _claims = ReadAndSplitInput<string>(input)
                 .Select(p => matcher.Match(p))
                 .Select(p => new Claim
                 {
