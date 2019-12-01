@@ -49,7 +49,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2017
                 .ToDictionary(p => p.Key, p => p.Count());
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is AnagramPhrase ap)
                 return Equals(ap);

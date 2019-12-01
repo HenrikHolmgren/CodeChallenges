@@ -353,7 +353,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
             return result;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is RegisterState reg)
                 return Equals(reg);

@@ -16,7 +16,9 @@ namespace WindowsillSoft.CodeChallenges.Core
         protected IIOProvider IO { get; }
 
         public abstract TResult Execute();
+#pragma warning disable CS8603 // Possible null reference return.
         public override object ExecuteObject() => Execute();
+#pragma warning restore CS8603 // Possible null reference return.
 
         public ProblemSolverBase(IIOProvider provider) => IO = provider;
 

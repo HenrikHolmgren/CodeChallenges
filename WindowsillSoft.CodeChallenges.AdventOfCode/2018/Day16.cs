@@ -7,7 +7,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
 {
     public class Day16 : AdventOfCode2018SolverBase
     {
-        private static List<(int Opcode, OpcodeParameterSet Par)> _instructions;
+        private static List<(int Opcode, OpcodeParameterSet Par)> _instructions = new List<(int Opcode, OpcodeParameterSet Par)>();
         private List<(RegisterState Start, int Opcode, OpcodeParameterSet Par, RegisterState Res)> _states
             = new List<(RegisterState Start, int Opcode, OpcodeParameterSet Par, RegisterState Res)>();
 
@@ -278,7 +278,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
                 return result;
             }
 
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
                 if (obj is RegisterState reg)
                     return Equals(reg);

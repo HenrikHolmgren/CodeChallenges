@@ -39,7 +39,7 @@ namespace WindowsillSoft.CodeChallenges.Core.Geometry
         public ManhattanPointNInt Zip(ManhattanPointNInt point, Func<int, int, int> selector)
             => new ManhattanPointNInt(_coordinates.Zip(point._coordinates, selector).ToArray());
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is ManhattanPointNInt manhattanPoint)
                 return Equals(manhattanPoint);

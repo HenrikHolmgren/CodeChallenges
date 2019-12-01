@@ -50,7 +50,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2017
         public override string ExecutePart2()
         {
             var root = _treeRoots.Single();
-            return GetBalanceChange(root).ToString();
+            return GetBalanceChange(root)?.ToString() ?? "Error: Unknown balance change";
         }
 
         private int? GetBalanceChange(RecursiveTreeNode root)

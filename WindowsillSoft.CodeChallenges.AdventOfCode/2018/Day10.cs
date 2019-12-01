@@ -115,7 +115,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018
             public int Vx;
             public int Vy;
 
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
                 return (obj is Star star
                     && star.X == X
