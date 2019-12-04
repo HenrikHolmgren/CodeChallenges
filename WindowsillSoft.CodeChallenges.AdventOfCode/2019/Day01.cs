@@ -31,7 +31,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
 
         public override void Initialize(string input)
         {
-            _inputMasses = ReadAndSplitInput<int>(input).ToArray();// input.Split().Select(p => Int32.Parse(p)).ToArray();
+            _inputMasses = ReadAndSplitInput<int>(input).ToArray();
         }
     }
 }
