@@ -42,8 +42,8 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode
         public abstract string ExecutePart1();
         public abstract string ExecutePart2();
 
-        protected IEnumerable<T> ReadAndSplitInput<T>(string input)
-            => input.Split()
+        protected IEnumerable<T> ReadAndSplitInput<T>(string input, params char[] separator)
+            => input.Split(separator)
             .Select(p => p.Trim())
             .Where(p => !string.IsNullOrWhiteSpace(p))
             .Select(p => Convert.ChangeType(p, typeof(T)))

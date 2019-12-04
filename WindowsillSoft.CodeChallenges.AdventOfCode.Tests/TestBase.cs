@@ -17,12 +17,12 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests
             _provider = new Mock<IIOProvider>().Object;
         }
 
-        public AdventOfCodeSolverBase GetSolver(string input)
+        public T GetSolver(string input)
         {
             Mock.Get(_provider).Setup(p => p.RequestFile(It.IsAny<string>())).Returns(input);
             var solver = Activator.CreateInstance(typeof(T), _provider) as AdventOfCodeSolverBase;
             solver.Initialize();
-            return solver;
+            return (T)solver;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using WindowsillSoft.CodeChallenges.Core;
 
@@ -12,7 +13,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
 
         public override string Name => "Day 1: The Tyranny of the Rocket Equation";
 
-        public override string ExecutePart1() => _inputMasses.Sum(GetFuelRequirement).ToString(); 
+        public override string ExecutePart1() => _inputMasses.Sum(GetFuelRequirement).ToString();
 
         public override string ExecutePart2() => _inputMasses.Sum(GetCompoundFuelRequirements).ToString();
 
