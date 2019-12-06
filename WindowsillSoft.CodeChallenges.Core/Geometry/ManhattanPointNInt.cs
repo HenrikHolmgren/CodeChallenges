@@ -9,6 +9,8 @@ namespace WindowsillSoft.CodeChallenges.Core.Geometry
 
         public int Length
             => _coordinates.Sum(p => Math.Abs(p));
+        public int Dimensions
+            => _coordinates.Length;
 
         public ManhattanPointNInt(int[] coordinates)
             => _coordinates = coordinates;
@@ -99,6 +101,69 @@ namespace WindowsillSoft.CodeChallenges.Core.Geometry
 
         public override string ToString()
             => $"<{String.Join(", ", _coordinates)}>";
+    }
 
+    public class AxisAlignedLineSegment
+    {
+        public ManhattanPointNInt P1 { get; }
+        public ManhattanPointNInt P2 { get; }
+
+        protected int AlignedAxis;
+
+        public AxisAlignedLineSegment(ManhattanPointNInt p1, ManhattanPointNInt p2)
+        {
+            if (p1.Dimensions != p2.Dimensions)
+                throw new InvalidOperationException("Cannot draw lines between points of different dimensionality.");
+
+            if (p1 == p2)
+                throw new InvalidOperationException("A segment cannot have line 0 and still have an alignment.");
+            if (Enumerable.Range(0, p1.Dimensions)
+                .Select(p => p1[p] != p2[p])
+                .Count(p => p == true) != 1)
+                throw new InvalidOperationException("The points are not axis-aligned. Please use a more generic line segment.");
+
+            P1 = p1;
+            P2 = p2;
+            AlignedAxis = Enumerable.Range(0, p1.Dimensions).Single(p => p1[p] != p2[p]);
+        }
+
+        public bool IsParallelTo(AxisAlignedLineSegment other)
+            => AlignedAxis == other.AlignedAxis;
+        public int Length
+            => (P2 - P1).Length;
+
+        public ManhattanPointNInt? GetUniqueIntersectionIfAny(AxisAlignedLineSegment other)
+        {
+            if (Enumerable.Range(0, P1.Dimensions).Count(p => P1[p] != other.P1[p]) > 2) return null;
+            if (IsParallelTo(other))
+            {
+                //allowed degenerated case
+                if (P1 == other.P1 && P2 != other.P2) return P1;
+                if (P1 == other.P2 && P2 != other.P1) return P1;
+                if (P2 == other.P2 && P1 != other.P1) return P2;
+                if (P2 == other.P1 && P1 != other.P2) return P2;
+
+                var intervalA = P1 < P2 ? new[] { P1[AlignedAxis], P2[AlignedAxis] } : new[] { P2[AlignedAxis], P1[AlignedAxis] };
+                var intervalB = other.P1 < other.P2 ? new[] { other.P1[AlignedAxis], other.P2[AlignedAxis] } : new[] { other.P2[AlignedAxis], other.P1[AlignedAxis] };
+
+                if (intervalA[0] > intervalB[0])
+                {
+                    //swap intervals
+                    intervalA[0] ^= intervalB[0];
+                    intervalB[0] ^= intervalA[0];
+                    intervalA[0] ^= intervalB[0];
+                    intervalA[1] ^= intervalB[1];
+                    intervalB[1] ^= intervalA[1];
+                    intervalA[1] ^= intervalB[1];
+                }
+
+                if (intervalB[0] < intervalA[1])
+                    throw new InvalidOperationException("Parallel line segments have multiple intersections");
+                
+                return null;
+            }
+            throw new NotImplementedException("Unfinished");
+            //return null;
+        }
     }
 }

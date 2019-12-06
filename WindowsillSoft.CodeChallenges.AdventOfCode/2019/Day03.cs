@@ -139,20 +139,6 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
                 }
                 return null;
             }
-
-            private ManhattanPointNInt? GetPossibleIntersectionInternal(AxisAlignedWireSegment other, int testCoordinate)
-            {
-                if (Origin[testCoordinate] <= other.Origin[testCoordinate] && Origin[testCoordinate] + Length >= other.Origin[testCoordinate])
-                {
-                    //Edge case, two similarly aligned 
-                    if (Origin[testCoordinate] == other.Origin[testCoordinate] + other.Length
-                        || Origin[testCoordinate] + Length == other.Origin[testCoordinate])
-                        return Origin;
-
-                    throw new InvalidOperationException("Two segments are overlapping in the same direction. Infinite intersections ensue.");
-                }
-                return null;
-            }
         }
     }
 }

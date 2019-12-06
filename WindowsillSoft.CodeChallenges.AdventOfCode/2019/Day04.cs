@@ -16,7 +16,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
             => Enumerable.Range(_minCode, _maxCode - _minCode)
             .Count(p => IsValidPassword1(p)).ToString();
 
-        public override string ExecutePart2() 
+        public override string ExecutePart2()
             => Enumerable.Range(_minCode, _maxCode - _minCode)
             .Count(p => IsValidPassword2(p)).ToString();
 
@@ -37,11 +37,12 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
         public static bool IsValidPassword2(int candidate)
         {
             var digits = candidate.ToString().Select(p => p - '0').ToArray();
-            return digits.Length == 6 && 
+            return digits.Length == 6 &&
                 Enumerable.Range(0, 5).Any(p => digits[p] == digits[p + 1] &&
                     (p == 0 || digits[p] != digits[p - 1]) &&
                     (p == 4 || digits[p + 1] != digits[p + 2])) &&
                 !Enumerable.Range(0, 5).Any(p => digits[p] > digits[p + 1]);
         }
     }
+
 }

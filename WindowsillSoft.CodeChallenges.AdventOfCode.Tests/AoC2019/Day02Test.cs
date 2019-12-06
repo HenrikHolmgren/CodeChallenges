@@ -5,20 +5,6 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests.AoC2019
 {
     public class Day02Test : TestBase<Day02>
     {
-        [Test,
-            TestCase(new long[] { 1, 0, 0, 0, 99 }, 2),
-            TestCase(new long[] { 2, 3, 0, 3, 99 }, 2),
-            TestCase(new long[] { 2, 4, 4, 5, 99, 0 }, 2),
-            TestCase(new long[] { 1, 0, 0, 0, 99 }, 2),
-            TestCase(new long[] { 1, 1, 1, 4, 99, 5, 6, 0, 99 }, 30)]
-        public void ExecuteIntegerCodeProgram(long[] input, long result)
-        {
-            var solver = GetSolver(string.Join(',', input));
-            solver.ExecuteIntegerCodeProgram(input);
-
-            Assert.That(input[0], Is.EqualTo(result));
-        }
-
         [Test]
         public void FullRun()
         {
