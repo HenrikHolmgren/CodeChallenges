@@ -20,7 +20,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
             };
 
             var output = machine.Run(_program.ToArray());
-            
+
             return output.Last().ToString();
         }
         public override string ExecutePart2()
@@ -31,11 +31,10 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
             };
 
             var output = machine.Run(_program.ToArray());
-            
+
             return output.Single().ToString();
         }
 
         public override void Initialize(string input) => _program = ReadAndSplitInput<int>(input, ',').ToArray();
     }
-
 }

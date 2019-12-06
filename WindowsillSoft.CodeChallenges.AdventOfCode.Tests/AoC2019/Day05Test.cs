@@ -13,5 +13,5 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests.AoC2019
             Assert.That(solver.ExecutePart2(), Is.EqualTo("2369720"));
         }
     }
-    }
+}
 
