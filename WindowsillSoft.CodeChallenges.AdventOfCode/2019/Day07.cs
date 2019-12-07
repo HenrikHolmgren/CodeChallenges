@@ -16,17 +16,17 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
 
         public override string ExecutePart1()
             => SimulateStageConfiguration(_program,
-                GetBestStageConfiguration(_program, 5))
+                GetBestStageConfiguration(_program, 5, 0))
                 .ToString();
 
         public override string ExecutePart2()
-        {
-            return "";
-        }
+            => SimulateStageConfiguration(_program,
+                GetBestStageConfiguration(_program, 5, 5))
+                .ToString();
 
-        public int[] GetBestStageConfiguration(int[] program, int stageCount)
+        public int[] GetBestStageConfiguration(int[] program, int stageCount, int phaseOffset)
         {
-            var configurationOutputs = Sequences.Permutations(Enumerable.Range(0, stageCount))
+            var configurationOutputs = Sequences.Permutations(Enumerable.Range(phaseOffset, stageCount))
                 .Select(p => (Sequence: p.ToArray(), LastStageOutput: SimulateStageConfiguration(program, p.ToArray())));
             return configurationOutputs.OrderByDescending(p => p.LastStageOutput)
                 .First().Sequence;
@@ -34,16 +34,32 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
 
         public int SimulateStageConfiguration(int[] program, int[] phaseSequence)
         {
-            int lastStateOutput = 0;
+            var machines = phaseSequence.Select(p => new IntCodeMachine(program.ToArray())).ToArray();
 
-            var machineRunner = new IntCodeMachine();
-            foreach (var phase in phaseSequence)
+            //prime with phase
+            for (int i = 0; i < phaseSequence.Length; i++)
             {
-                var inputSequence = new[] { phase, lastStateOutput };
-                var output = machineRunner.WithInput(inputSequence).Run((int[])program.Clone());
-                lastStateOutput = output.Single();
+                var machine = machines[i];
+
+                if (!(machine.Run() is IntCodeMachine.InputRequestState))
+                    throw new InvalidOperationException("Expected machine to request phase state input");
+                machine.ProvideInputAndContinue(phaseSequence[i]);
             }
-            return lastStateOutput;
+
+            while (!machines.All(p => p.IsHalted))
+            {
+                for (int i = 0; i < phaseSequence.Length; i++)
+                {
+                    var machine = machines[i];
+
+                    if (machine.CurrentState is IntCodeMachine.InputRequestState)
+                        machine.ProvideInputAndContinue(machines[(i + machines.Length - 1) % machines.Length].LastOutput ?? 0);
+
+                    if (machine.CurrentState is IntCodeMachine.OutputAvailableState)
+                        machine.AcceptOutputAndContinue();
+                }
+            }
+            return machines.Last().LastOutput ?? 0;
         }
 
         public override void Initialize(string input) => _program = ReadAndSplitInput<int>(input, ',').ToArray();

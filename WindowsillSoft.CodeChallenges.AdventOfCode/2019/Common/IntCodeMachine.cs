@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -7,97 +8,124 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019.Common
 {
     public class IntCodeMachine
     {
-        private Func<int, int>? _requestInput = null;
-        private int[] _inputSequence = new int[0];
+        private int[] _program;
+        private int _programCounter;
+        private int? _lastOutput;
 
-        public IntCodeMachine() { }
+        public int? LastOutput => _lastOutput;
+        public bool IsHalted => _program[_programCounter] % 100 == 99;
 
-        public IntCodeMachine WithInput(int[] inputSequence)
+        public IntCodeMachine(int[] program)
         {
-            (_inputSequence, _requestInput) = (inputSequence, null);
-            return this;
+            _program = program;
+            _programCounter = 0;
         }
 
-        public IntCodeMachine WithInput(Func<int, int> requestInput)
+        public StateBase Run()
         {
-            (_inputSequence, _requestInput) = (new int[0], requestInput);
-            return this;
+            if (_programCounter != 0)
+                throw new InvalidOperationException("Machine is already running!");
+
+            var res = ContinueExecution();
+            Debug.WriteLine(res);
+
+            return res;
         }
 
-        public int[] Run(int[] program)
+        public StateBase AcceptOutputAndContinue()
         {
-            int _inputIndex = 0;
-            var output = new List<int>();
-            int pc = 0;
-            while (program[pc] != 99)
+            if (_program[_programCounter] % 100 != 04)
+                throw new InvalidOperationException("Program was halted providing output!");
+
+            _programCounter += 2;
+
+            var res = ContinueExecution();
+            Debug.WriteLine(res);
+
+            return res;
+        }
+
+        public StateBase ProvideInputAndContinue(int input)
+        {
+            if (_program[_programCounter] % 100 != 03)
+                throw new InvalidOperationException("Program was not expecting input!");
+
+            WriteMemory(_program, _programCounter + 1, input,
+                            GetMode(_program[_programCounter], 0));
+            _programCounter += 2;
+
+            var res = ContinueExecution();
+            Debug.WriteLine(res);
+
+            return res;
+        }
+
+        private StateBase ContinueExecution()
+        {
+            while (true)
             {
-                var instruction = program[pc];
+                var instruction = _program[_programCounter];
                 switch (instruction % 100)
                 {
                     case 01: //add
-                        WriteMemory(program, pc + 3,
-                            ReadMemory(program, pc + 2, GetMode(instruction, 1)) + ReadMemory(program, pc + 1, GetMode(instruction, 0)),
+                        WriteMemory(_program, _programCounter + 3,
+                            ReadMemory(_program, _programCounter + 2, GetMode(instruction, 1)) + ReadMemory(_program, _programCounter + 1, GetMode(instruction, 0)),
                             GetMode(instruction, 2));
-                        pc += 4;
+                        _programCounter += 4;
                         break;
                     case 02: //mult
-                        WriteMemory(program, pc + 3,
-                            ReadMemory(program, pc + 2, GetMode(instruction, 1)) * ReadMemory(program, pc + 1, GetMode(instruction, 0)),
+                        WriteMemory(_program, _programCounter + 3,
+                            ReadMemory(_program, _programCounter + 2, GetMode(instruction, 1)) * ReadMemory(_program, _programCounter + 1, GetMode(instruction, 0)),
                             GetMode(instruction, 2));
-                        pc += 4;
+                        _programCounter += 4;
                         break;
                     case 03: //read-input
-                        WriteMemory(program, pc + 1, RequestInput(_inputIndex++),
-                            GetMode(instruction, 0));
-                        pc += 2;
-                        break;
+                        return new InputRequestState();
                     case 04: //write-output
-                        output.Add(ReadMemory(program, pc + 1, GetMode(instruction, 0)));
-                        pc += 2;
-                        break;
+                        _lastOutput = (ReadMemory(_program, _programCounter + 1, GetMode(instruction, 0)));
+                        return new OutputAvailableState { Value = _lastOutput.Value };
                     case 05: //jump-if-true                        
-                        if (ReadMemory(program, pc + 1, GetMode(instruction, 0)) != 0)
-                            pc = ReadMemory(program, pc + 2, GetMode(instruction, 1));
-                        else pc += 3;
+                        if (ReadMemory(_program, _programCounter + 1, GetMode(instruction, 0)) != 0)
+                            _programCounter = ReadMemory(_program, _programCounter + 2, GetMode(instruction, 1));
+                        else _programCounter += 3;
                         break;
                     case 06: //jump-if-true
-                        if (ReadMemory(program, pc + 1, GetMode(instruction, 0)) == 0)
-                            pc = ReadMemory(program, pc + 2, GetMode(instruction, 1));
-                        else pc += 3;
+                        if (ReadMemory(_program, _programCounter + 1, GetMode(instruction, 0)) == 0)
+                            _programCounter = ReadMemory(_program, _programCounter + 2, GetMode(instruction, 1));
+                        else _programCounter += 3;
                         break;
                     case 07: //less-than
-                        if (ReadMemory(program, pc + 1, GetMode(instruction, 0)) <
-                            ReadMemory(program, pc + 2, GetMode(instruction, 1)))
-                            WriteMemory(program, pc + 3, 1, GetMode(instruction, 2));
+                        if (ReadMemory(_program, _programCounter + 1, GetMode(instruction, 0)) <
+                            ReadMemory(_program, _programCounter + 2, GetMode(instruction, 1)))
+                            WriteMemory(_program, _programCounter + 3, 1, GetMode(instruction, 2));
                         else
-                            WriteMemory(program, pc + 3, 0, GetMode(instruction, 2));
-                        pc += 4;
+                            WriteMemory(_program, _programCounter + 3, 0, GetMode(instruction, 2));
+                        _programCounter += 4;
                         break;
                     case 08: //less-than
-                        if (ReadMemory(program, pc + 1, GetMode(instruction, 0)) ==
-                            ReadMemory(program, pc + 2, GetMode(instruction, 1)))
-                            WriteMemory(program, pc + 3, 1, GetMode(instruction, 2));
+                        if (ReadMemory(_program, _programCounter + 1, GetMode(instruction, 0)) ==
+                            ReadMemory(_program, _programCounter + 2, GetMode(instruction, 1)))
+                            WriteMemory(_program, _programCounter + 3, 1, GetMode(instruction, 2));
                         else
-                            WriteMemory(program, pc + 3, 0, GetMode(instruction, 2));
-                        pc += 4;
+                            WriteMemory(_program, _programCounter + 3, 0, GetMode(instruction, 2));
+                        _programCounter += 4;
                         break;
-                    case 99: //break
-                             //Actually handled by while-loop, but includee here for documentation completeness.
+                    case 99: //Halt
+                        return new MachineHaltedState();
                     default:
-                        throw new InvalidOperationException($"Unknown OPCODE {program[pc]}; halt and catch fire!");
+                        throw new InvalidOperationException($"Unknown OPCODE {_program[_programCounter]}; halt and catch fire!");
                 }
             }
-            return output.ToArray();
         }
 
-        private int RequestInput(int inputIndex)
-        {
-            if (_requestInput != null)
-                return _requestInput.Invoke(inputIndex);
-            if (inputIndex < _inputSequence.Length)
-                return _inputSequence[inputIndex];
-            throw new InvalidOperationException("Buffer underrun: No more input available!");
-        }
+        public StateBase CurrentState =>
+            (_program[_programCounter] % 100) switch
+            {
+                03 => new InputRequestState(),
+                04 => new OutputAvailableState { Value = LastOutput!.Value},
+                99 => new MachineHaltedState(),
+                var p => throw new InvalidOperationException($"Current program state is at a non-halting opcode {p}")
+            };
 
         private int GetMode(int instruction, int argumentNumber)
             => (instruction / (int)Math.Pow(10, argumentNumber + 2)) % 10;
@@ -113,5 +141,10 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019.Common
             if (mode == 0) memory[memory[address]] = value;
             else memory[address] = value;
         }
+
+        public class StateBase { public override string ToString() => $"{this.GetType().Name}"; }
+        public class MachineHaltedState : StateBase { }
+        public class InputRequestState : StateBase { }
+        public class OutputAvailableState : StateBase { public int Value; public override string ToString() => $"{this.GetType().Name}({Value})"; }
     }
 }
