@@ -27,7 +27,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests.AoC2019.Common
         public void Allows_input_output()
         {
             var program = new[] { 3, 0, 4, 0, 99 };
-            var machine = new IntCodeMachine() { RequestInput = () => 42 };
+            var machine = new IntCodeMachine().WithInput(p => 42);
             var result = machine.Run(program);
             Assert.That(result, Is.EquivalentTo(new[] { 42 }));
         }
@@ -54,10 +54,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests.AoC2019.Common
         public void Conditionals_equality_position_mode(int input, int result)
         {
             var program = new[] { 3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8 };
-            var machine = new IntCodeMachine()
-            {
-                RequestInput = () => input,
-            };
+            var machine = new IntCodeMachine().WithInput(p => input);
 
             var output = machine.Run(program);
             Assert.That(output, Is.EquivalentTo(new[] { result }));
@@ -67,10 +64,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests.AoC2019.Common
         public void Conditionals_equality_immediate_mode(int input, int result)
         {
             var program = new[] { 3, 3, 1108, -1, 8, 3, 4, 3, 99 };
-            var machine = new IntCodeMachine()
-            {
-                RequestInput = () => input,
-            };
+            var machine = new IntCodeMachine().WithInput(p => input);
 
             var output = machine.Run(program);
             Assert.That(output, Is.EquivalentTo(new[] { result }));
@@ -80,10 +74,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests.AoC2019.Common
         public void Conditionals_lessThan_position_mode(int input, int result)
         {
             var program = new[] { 3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8 };
-            var machine = new IntCodeMachine()
-            {
-                RequestInput = () => input,
-            };
+            var machine = new IntCodeMachine().WithInput(p => input);
 
             var output = machine.Run(program);
             Assert.That(output, Is.EquivalentTo(new[] { result }));
@@ -93,10 +84,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests.AoC2019.Common
         public void Conditionals_lessThan_immediate_mode(int input, int result)
         {
             var program = new[] { 3, 3, 1107, -1, 8, 3, 4, 3, 99 };
-            var machine = new IntCodeMachine()
-            {
-                RequestInput = () => input,
-            };
+            var machine = new IntCodeMachine().WithInput(p => input);
 
             var output = machine.Run(program);
             Assert.That(output, Is.EquivalentTo(new[] { result }));
@@ -106,23 +94,17 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests.AoC2019.Common
         public void Conditional_jump_position_mode(int input, int result)
         {
             var program = new[] { 3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9 };
-            var machine = new IntCodeMachine()
-            {
-                RequestInput = () => input
-            };
+            var machine = new IntCodeMachine().WithInput(p => input);
 
             var output = machine.Run(program);
             Assert.That(output, Is.EquivalentTo(new[] { result }));
         }
-        
+
         [Test, TestCase(1, 1), TestCase(-1, 1), TestCase(0, 0), TestCase(99, 1)]
         public void Conditional_jump_immediate_mode(int input, int result)
         {
             var program = new[] { 3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1 };
-            var machine = new IntCodeMachine()
-            {
-                RequestInput = () => input
-            };
+            var machine = new IntCodeMachine().WithInput(p => input);
 
             var output = machine.Run(program);
             Assert.That(output, Is.EquivalentTo(new[] { result }));
@@ -136,10 +118,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests.AoC2019.Common
                 1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
                 999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99};
 
-            var machine = new IntCodeMachine()
-            {
-                RequestInput = () => input
-            };
+            var machine = new IntCodeMachine().WithInput(p => input);
 
             var output = machine.Run(program);
             Assert.That(output, Is.EquivalentTo(new[] { result }));

@@ -15,9 +15,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
         public override string ExecutePart1()
         {
             var machine = new IntCodeMachine()
-            {
-                RequestInput = () => 1
-            };
+                .WithInput(new[] { 1 });
 
             var output = machine.Run(_program.ToArray());
 
@@ -26,9 +24,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
         public override string ExecutePart2()
         {
             var machine = new IntCodeMachine()
-            {
-                RequestInput = () => 5
-            };
+                .WithInput(new[] { 5 });
 
             var output = machine.Run(_program.ToArray());
 

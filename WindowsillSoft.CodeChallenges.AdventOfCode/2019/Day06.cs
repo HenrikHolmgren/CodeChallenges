@@ -11,7 +11,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
 
         public Day06(IIOProvider provider) : base(provider) { _orbits = new OrbitTree("COM"); }
 
-        public override string Name => "Day 5: Sunny with a Chance of Asteroids";
+        public override string Name => "Day 6: Universal Orbit Map";
 
         public override string ExecutePart1()
         {
