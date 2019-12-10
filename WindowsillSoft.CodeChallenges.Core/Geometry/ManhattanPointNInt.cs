@@ -146,22 +146,13 @@ namespace WindowsillSoft.CodeChallenges.Core.Geometry
                 var intervalA = P1 < P2 ? new[] { P1[AlignedAxis], P2[AlignedAxis] } : new[] { P2[AlignedAxis], P1[AlignedAxis] };
                 var intervalB = other.P1 < other.P2 ? new[] { other.P1[AlignedAxis], other.P2[AlignedAxis] } : new[] { other.P2[AlignedAxis], other.P1[AlignedAxis] };
 
-                if (intervalA[0] > intervalB[0])
-                {
-                    //swap intervals
-                    intervalA[0] ^= intervalB[0];
-                    intervalB[0] ^= intervalA[0];
-                    intervalA[0] ^= intervalB[0];
-                    intervalA[1] ^= intervalB[1];
-                    intervalB[1] ^= intervalA[1];
-                    intervalA[1] ^= intervalB[1];
-                }
-
-                if (intervalB[0] < intervalA[1])
+                if((intervalA[0] < intervalB[0] && intervalB[0] < intervalA[1])
+                    || (intervalA[0] > intervalB[0] && intervalA[0] < intervalB[1]))
                     throw new InvalidOperationException("Parallel line segments have multiple intersections");
-                
+               
                 return null;
             }
+
             throw new NotImplementedException("Unfinished");
             //return null;
         }

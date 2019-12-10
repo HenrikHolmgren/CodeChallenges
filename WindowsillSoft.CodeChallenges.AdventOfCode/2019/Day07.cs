@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WindowsillSoft.CodeChallenges.AdventOfCode._2019.Common;
 using WindowsillSoft.CodeChallenges.Core;
@@ -8,9 +9,9 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
 {
     public class Day07 : AdventOfCode2019SolverBase
     {
-        private int[] _program;
+        private long[] _program;
 
-        public Day07(IIOProvider provider) : base(provider) { _program = new int[] { }; }
+        public Day07(IIOProvider provider) : base(provider) { _program = new long[] { }; }
 
         public override string Name => "";
 
@@ -24,7 +25,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
                 GetBestStageConfiguration(_program, 5, 5))
                 .ToString();
 
-        public int[] GetBestStageConfiguration(int[] program, int stageCount, int phaseOffset)
+        public int[] GetBestStageConfiguration(long[] program, int stageCount, int phaseOffset)
         {
             var configurationOutputs = Sequences.Permutations(Enumerable.Range(phaseOffset, stageCount))
                 .Select(p => (Sequence: p.ToArray(), LastStageOutput: SimulateStageConfiguration(program, p.ToArray())));
@@ -32,7 +33,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
                 .First().Sequence;
         }
 
-        public int SimulateStageConfiguration(int[] program, int[] phaseSequence)
+        public long SimulateStageConfiguration(long[] program, int[] phaseSequence)
         {
             var machines = phaseSequence.Select(p => new IntCodeMachine(program.ToArray())).ToArray();
 
@@ -62,6 +63,6 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
             return machines.Last().LastOutput ?? 0;
         }
 
-        public override void Initialize(string input) => _program = ReadAndSplitInput<int>(input, ',').ToArray();
+        public override void Initialize(string input) => _program = ReadAndSplitInput<long>(input, ',').ToArray();
     }
 }

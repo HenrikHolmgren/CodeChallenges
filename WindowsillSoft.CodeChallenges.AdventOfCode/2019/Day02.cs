@@ -7,7 +7,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
 {
     public class Day02 : AdventOfCode2019SolverBase
     {
-        private int[] _input = new int[0];
+        private long[] _input = new long[0];
 
         public override string Name => "Day 2: 1202 Program Alarm";
         public Day02(IIOProvider provider) : base(provider) { }
@@ -22,7 +22,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
             var machine = new IntCodeMachine(program);
             machine.Run();
 
-            return program[0].ToString();
+            return machine.Peek(0).ToString();
         }
 
         public override string ExecutePart2()
@@ -39,13 +39,12 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
 
                     var machine = new IntCodeMachine(program);
                     machine.Run();
-
-                    if (program[0] == 19690720)
+                    if (machine.Peek(0) == 19690720L)
                         return $"{noun:00}{verb:00}";
                 }
             throw new InvalidOperationException("Unable to find solution!");
         }
 
-        public override void Initialize(string input) => _input = ReadAndSplitInput<int>(input, ',').ToArray();
+        public override void Initialize(string input) => _input = ReadAndSplitInput<long>(input, ',').ToArray();
     }
 }

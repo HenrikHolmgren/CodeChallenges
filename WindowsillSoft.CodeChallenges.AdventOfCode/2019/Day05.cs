@@ -9,7 +9,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
 {
     public class Day05 : AdventOfCode2019SolverBase
     {
-        int[] _program = new int[] { };
+        long[] _program = new long[] { };
 
         public Day05(IIOProvider provider) : base(provider) { }
 
@@ -27,12 +27,12 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
             return RunAndGetLastOutput(machine, 5).ToString();
         }
 
-        private int RunAndGetLastOutput(IntCodeMachine machine, int inputValue)
+        private long RunAndGetLastOutput(IntCodeMachine machine, int inputValue)
         {
             if (!(machine.Run() is IntCodeMachine.InputRequestState))
                 throw new InvalidOperationException("Expected an input request");
 
-            int lastOutput = 0;
+            long lastOutput = 0;
 
             var res = machine.ProvideInputAndContinue(inputValue);
             while(res is IntCodeMachine.OutputAvailableState output)
@@ -43,6 +43,6 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019
             return lastOutput;
         }
 
-        public override void Initialize(string input) => _program = ReadAndSplitInput<int>(input, ',').ToArray();
+        public override void Initialize(string input) => _program = ReadAndSplitInput<long>(input, ',').ToArray();
     }
 }
