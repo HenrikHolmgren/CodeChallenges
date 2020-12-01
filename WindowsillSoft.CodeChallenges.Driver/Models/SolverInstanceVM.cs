@@ -20,9 +20,14 @@ namespace WindowsillSoft.CodeChallenges.Driver.Models
 
         public SolverInstanceVM(Type solverType, IIOProvider iOProvider) : this()
         {
-            _problemSolver = (ProblemSolverBase)Activator.CreateInstance(solverType, iOProvider);
-
-            SolverDescription = _problemSolver.Name;
+            var solver = (ProblemSolverBase?)Activator.CreateInstance(solverType, iOProvider);
+            if (solver != null)
+            {
+                SolverDescription = solver.Name;
+                _problemSolver = solver;
+            }
+            else
+                throw new InvalidOperationException($"Somehow Activator.CreateInstance for type {solverType} returned null.");
         }
 
         protected SolverInstanceVM()

@@ -44,7 +44,7 @@ namespace WindowsillSoft.CodeChallenges.Driver
         public class MainWindowVM : INotifyPropertyChanged
         {
 
-            public event PropertyChangedEventHandler PropertyChanged;
+            public event PropertyChangedEventHandler? PropertyChanged;
 
             public ObservableCollection<SolverCategoryVM> Solvers { get; }
 
@@ -88,10 +88,10 @@ namespace WindowsillSoft.CodeChallenges.Driver
 
     public static class TypeExtensions
     {
-        public static Type GetAnnotatedBase<T>(this Type type) where T : Attribute
+        public static Type? GetAnnotatedBase<T>(this Type type) where T : Attribute
         {
             var res = type.BaseType;
-            while (res != typeof(object) && !res.GetCustomAttributes(false).Any(p => p is T))
+            while (res != null && res != typeof(object) && !res.GetCustomAttributes(false).Any(p => p is T))
                 res = res.BaseType;
             return res;
         }

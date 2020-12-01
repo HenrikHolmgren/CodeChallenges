@@ -11,8 +11,8 @@ namespace WindowsillSoft.CodeChallenges.Driver.Dialogs
     /// </summary>
     public partial class ChoiceDialog : Window
     {
-        private ChoiceDialogVM _model;
-        private ChoiceDialogVM Model { get => _model; set => DataContext = _model = value; }
+        private ChoiceDialogVM? _model;
+        private ChoiceDialogVM? Model { get => _model; set => DataContext = _model = value; }
 
         private ChoiceDialog(string header, IEnumerable<object> choices)
         {
@@ -20,7 +20,7 @@ namespace WindowsillSoft.CodeChallenges.Driver.Dialogs
             Model = new ChoiceDialogVM(header, choices);
         }
 
-        private object? Result => Model.SelectedChoice;
+        private object? Result => Model?.SelectedChoice;
         public static T? ShowDialog<T>(string header, IEnumerable<T> choices) where T : class
         {
             var dlg = new ChoiceDialog(header, choices);
@@ -50,7 +50,7 @@ namespace WindowsillSoft.CodeChallenges.Driver.Dialogs
         public ChoiceDialogChoiceVM(object value)
         {
             Value = value;
-            Description = value.ToString();
+            Description = value.ToString() ?? string.Empty;
         }
 
         public object Value { get; }
@@ -67,6 +67,6 @@ namespace WindowsillSoft.CodeChallenges.Driver.Dialogs
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

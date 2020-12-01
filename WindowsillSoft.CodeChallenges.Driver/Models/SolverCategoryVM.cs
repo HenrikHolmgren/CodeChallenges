@@ -17,12 +17,11 @@ namespace WindowsillSoft.CodeChallenges.Driver.Models
 
         public int SolverCount => ChildCategories.Sum(p => p.SolverCount) + Solvers.Count;
 
-        public SolverCategoryVM(Type root, ILookup<Type, Type> problemSolvers, IIOProvider iOProvider) : this(root)
+        public SolverCategoryVM(Type root, ILookup<Type?, Type> problemSolvers, IIOProvider iOProvider) : this(root)
         {
             Debug.WriteLine($"Category for {root.FullName}");
 
-            var children = problemSolvers.Where(p => p.Key == root || p.Key.IsGenericType && p.Key.GetGenericTypeDefinition() == root)
-                .Where(p=>p!=root)
+            var children = problemSolvers.Where(p => p.Key != null && (p.Key == root || p.Key.IsGenericType && p.Key.GetGenericTypeDefinition() == root))
                 .SelectMany(p => p);
 
             Debug.WriteLine($"{children.Count()} children found..");
