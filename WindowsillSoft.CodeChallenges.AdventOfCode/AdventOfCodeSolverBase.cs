@@ -43,11 +43,14 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode
         public abstract string ExecutePart2();
 
         protected IEnumerable<T> ReadAndSplitInput<T>(string input, params char[] separator)
+            => ReadAndSplitInput(input, parser => (T)Convert.ChangeType(parser, typeof(T)), separator);
+
+        protected IEnumerable<T> ReadAndSplitInput<T>(string input, Func<string, T> convert, params char[] separator)
             => input.Split(separator)
-            .Select(p => p.Trim())
-            .Where(p => !string.IsNullOrWhiteSpace(p))
-            .Select(p => Convert.ChangeType(p, typeof(T)))
-            .Cast<T>();
+                .Select(p => p.Trim())
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .Select(convert)
+                .Cast<T>();
     }
 
     public class AdventOfCodeResult
