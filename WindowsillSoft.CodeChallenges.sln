@@ -15,7 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsillSoft.CodeChalleng
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsillSoft.CodeChallenges.ProjectEuler.Tests", "WindowsillSoft.CodeChallenges.ProjectEuler.Tests\WindowsillSoft.CodeChallenges.ProjectEuler.Tests.csproj", "{59C2EB4D-F51F-47BE-8FB6-DBB93475E55B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsillSoft.CodeChallenges.Driver", "WindowsillSoft.CodeChallenges.Driver\WindowsillSoft.CodeChallenges.Driver.csproj", "{E534CF67-50B6-40A4-A997-606D996D37E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsillSoft.CodeChallenges.Driver", "WindowsillSoft.CodeChallenges.Driver\WindowsillSoft.CodeChallenges.Driver.csproj", "{E534CF67-50B6-40A4-A997-606D996D37E7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FCCCDD03-937E-4C76-897A-4BEDA33348D9}"
+	ProjectSection(SolutionItems) = preProject
+		AocSolver.snippet = AocSolver.snippet
+		AocTester.snippet = AocTester.snippet
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

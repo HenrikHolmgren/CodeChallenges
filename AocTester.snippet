@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>AocTester</Title>
+          <Shortcut>aoctest</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CSharp">
+                <![CDATA[    public class Day$day$Test : TestBase<Day$day$>
+    {
+        [Test,
+            TestCase("", "")]
+        public void Part1(string input, string result)
+        {
+            var solver = GetSolver(input);
+
+            Assert.That(solver.ExecutePart1(), Is.EqualTo(result));
+        }
+
+        [Test,
+            TestCase("", "")]
+        public void Part2(string input, string result)
+        {
+            var solver = GetSolver(input);
+
+            Assert.That(solver.ExecutePart2(), Is.EqualTo(result));
+        }
+        [Test]
+        public void FullRun()
+        {
+            var solver = GetSolver("");
+            Assert.That(solver.ExecutePart1(), Is.EqualTo(""));
+            Assert.That(solver.ExecutePart2(), Is.EqualTo(""));
+        }
+    }]]>
+            </Code>
+          <Declarations>
+            <Literal>
+              <ID>day</ID>
+              <Default>01</Default> 
+            </Literal>         
+          </Declarations>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
