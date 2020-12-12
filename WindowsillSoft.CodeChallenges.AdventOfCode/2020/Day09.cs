@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using WindowsillSoft.CodeChallenges.Core;
 
 namespace WindowsillSoft.CodeChallenges.AdventOfCode._2020
@@ -52,6 +51,5 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2020
             _preampleLength = (int)raw.First();
             _code = raw.Skip(1).ToArray();
         }
-
     }
 }
