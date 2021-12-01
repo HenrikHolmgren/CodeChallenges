@@ -1,0 +1,54 @@
+#!markdown
+
+# Common functions
+
+So far, only contains what is expected to be a heavily reused load-and-parse method.
+
+#!csharp
+
+public T[] LoadAndParse<T>(string path, Func<string, T> parse = null) {  
+    parse = parse ?? (p => (T) Convert.ChangeType(p, typeof(T)));
+    var rawInput = System.IO.File.ReadAllLines(path);
+    return rawInput
+    .Where(p=>!string.IsNullOrWhiteSpace(p))
+    .Select(parse)
+    .ToArray();
+}
+
+#!markdown
+
+# Day 1 - Sonar Sweep
+
+Fairly straightforward implementation of moving sum, with the Part 1 puzzle being the special case of a moving average of 1 item.
+
+Solution is strictly O(n)
+
+The solution below leverages the fact that the window can be advanced with minimum calculations by subtracting the first item of the old window (which is about to exit the window) followed by adding the new element about to be added to the window. 
+
+In this way, we can maintain a window of arbitrary size with just one addition and one subtraction pr. element.
+
+#!csharp
+
+{
+    var input = LoadAndParse<int>(@"day1_input.txt");
+    
+    Console.WriteLine($"Part 1: {CountIncrements(MovingSums(input, 1))}");
+    Console.WriteLine($"Part 1: {CountIncrements(MovingSums(input, 3))}");    
+
+    int CountIncrements(IEnumerable<int> source)
+        => source.Zip(source.Skip(1)).Count(p=>p.Item1 < p.Item2);
+
+    IEnumerable<int> MovingSums(IEnumerable<int> source, int windowSize) {
+        var initial = source.Take(windowSize).Sum();
+        yield return initial;
+
+        //Start a double iterator on the source collection, separated by windowSize elements
+        foreach (var pair in source.Zip(source.Skip(windowSize))){
+
+            //When advancing the window, remove the start element of the old window, and add the last element of the new window
+            initial -= pair.Item1; 
+            initial += pair.Item2;
+            yield return initial;
+        }
+    }
+}
