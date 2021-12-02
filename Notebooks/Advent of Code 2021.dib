@@ -33,7 +33,7 @@ In this way, we can maintain a window of arbitrary size with just one addition a
     var input = LoadAndParse<int>(@"day1_input.txt");
     
     Console.WriteLine($"Part 1: {CountIncrements(MovingSums(input, 1))}");
-    Console.WriteLine($"Part 1: {CountIncrements(MovingSums(input, 3))}");    
+    Console.WriteLine($"Part 2: {CountIncrements(MovingSums(input, 3))}");    
 
     int CountIncrements(IEnumerable<int> source)
         => source.Zip(source.Skip(1)).Count(p=>p.Item1 < p.Item2);
@@ -52,3 +52,51 @@ In this way, we can maintain a window of arbitrary size with just one addition a
         }
     }
 }
+
+#!markdown
+
+# Day 2: Dive!
+
+#!csharp
+
+enum CommandDirection{ forward, down, up }
+record Command (CommandDirection Direction, int Amount );
+record Position(int Horizontal, int Depth);
+record PositionWithAim(int Horizontal, int Depth, int Aim);
+
+{
+    var input =  LoadAndParse<Command>(@"day2_input.txt", p=>{
+        var particles = p.Split(" ");
+        var direction = Enum.Parse<CommandDirection>(particles[0]);
+        var amount = Int32.Parse(particles[1]);
+        return new Command(direction, amount);
+    });
+
+    var part1position =new Position(0,0);
+
+    foreach(var command in input){
+        part1position = command.Direction switch {
+            CommandDirection.forward => part1position with {Horizontal = part1position.Horizontal + command.Amount },
+            CommandDirection.down => part1position with {Depth = part1position.Depth + command.Amount },
+            CommandDirection.up => part1position with {Depth = part1position.Depth - command.Amount },
+            _=>part1position
+        };
+    }
+    
+    var part2position = new PositionWithAim(0,0,0);
+    foreach(var command in input){
+        part2position = command.Direction switch {
+            CommandDirection.forward => part2position with {Horizontal = part2position.Horizontal + command.Amount, Depth = part2position.Depth + part2position.Aim * command.Amount},
+            CommandDirection.down => part2position with {Aim = part2position.Aim + command.Amount },
+            CommandDirection.up => part2position with {Aim = part2position.Aim - command.Amount },
+            _=>part2position
+        };
+    }
+    
+    Console.WriteLine($"Part 1: {part1position.Horizontal * part1position.Depth} ({part1position})");
+    Console.WriteLine($"Part 2: {part2position.Horizontal * part2position.Depth} ({part2position})");
+}
+
+#!csharp
+
+enum CommandDirection { forward, down, up, back}
