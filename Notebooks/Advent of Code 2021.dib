@@ -99,4 +99,32 @@ record PositionWithAim(int Horizontal, int Depth, int Aim);
 
 #!csharp
 
-enum CommandDirection { forward, down, up, back}
+{
+    var input = LoadAndParse<string>(@"day3_test.txt");
+    var bitmask = (1<<input[0].Length)-1; 
+    int gamma = 0;
+
+    for(int i = 0; i < input[0].Length; i++){
+        gamma <<= 1;
+        if(input.Count(p=>p[i]=='1') > input.Length/2)
+            gamma++;
+    }
+
+    var epsilon = ~gamma & bitmask;
+
+    Console.WriteLine($"Gamma: {gamma}");
+    Console.WriteLine($"Epsilon: {epsilon}");
+    Console.WriteLine(gamma * epsilon);
+
+    string Reduce(IEnumerable<string> source)
+    {
+        for(int i = 0; i < source.First().Length; i++){            
+            if(source.Count(p=>p[i]=='1') > input.Length/2)
+                source = source.Where(p=>p[i] == '1');
+            else 
+                source = source.Where(p=>p[i]=='0');
+        }
+        
+        return source.Sigle();
+    }
+}
