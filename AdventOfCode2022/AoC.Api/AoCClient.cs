@@ -28,10 +28,10 @@ public class AoCClient : IDisposable
     public Task<string> GetRawInputAsync(int year, int day)
         => EnsureCachedAsync(year, day, "input", async () => await _client.Value.GetStringAsync($"{year}/day/{day}/input"));
 
-    public async Task<string[]> GetLinesAsync(int year, int day)
+    public async Task<string[]> GetLinesAsync(int year, int day, StringSplitOptions splitOptions = StringSplitOptions.RemoveEmptyEntries)
     {
         var content = await GetRawInputAsync(year, day);
-        return content.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        return content.Split(new[] { '\r', '\n' }, splitOptions);
     }
 
     public async Task<int[]> GetNumbersAsync(int year, int day)
