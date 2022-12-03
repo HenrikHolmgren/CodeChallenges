@@ -12,7 +12,7 @@ var part1 = input.Sum(p => p switch
     { Thrown: 'C', Response: 'X' } => 1 + 6, // Win with rock
     { Thrown: 'C', Response: 'Y' } => 2 + 0, // Lose with paper
     { Thrown: 'C', Response: 'Z' } => 3 + 3, // Draw with scissors
-    _=>throw new ArgumentOutOfRangeException(p.ToString())
+    _ => throw new ArgumentOutOfRangeException(p.ToString())
 });
 System.Console.WriteLine($"Part 1: {part1}");
 
@@ -27,7 +27,7 @@ var part2 = input.Sum(p => p switch
     { Thrown: 'C', Response: 'X' } => 2 + 0, // Lose with paper
     { Thrown: 'C', Response: 'Y' } => 3 + 3, // Draw with scissors
     { Thrown: 'C', Response: 'Z' } => 1 + 6, // Win with rock
-    _=>throw new ArgumentOutOfRangeException(p.ToString())
+    _ => throw new ArgumentOutOfRangeException(p.ToString())
 });
 System.Console.WriteLine($"Part 2: {part2}");
 
