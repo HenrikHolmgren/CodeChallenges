@@ -36,8 +36,9 @@ public class AoCClient : IDisposable
 
     public async Task<int[]> GetNumbersAsync(int year, int day)
     {
-        var content = await GetLinesAsync(year, day);
-        return content.Select(Int32.Parse).ToArray();
+        var content = await GetRawInputAsync(year, day);
+        return content.Split(new[] { '\r', '\n', ',' }, StringSplitOptions.RemoveEmptyEntries)
+        .Select(Int32.Parse).ToArray();
     }
 
     public async Task<T[]> GetParsedAsync<T>(int year, int day, Func<string, T> parse)

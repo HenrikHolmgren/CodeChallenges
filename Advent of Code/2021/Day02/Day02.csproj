@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AoC.Common\AoC.Common.csproj" />
+        <ProjectReference Include="..\..\AoC.Common\AoC.Common.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

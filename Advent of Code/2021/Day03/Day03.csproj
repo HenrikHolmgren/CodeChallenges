@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Api\AoC.Api.csproj" />
+    <ProjectReference Include="..\..\AoC.Common\AoC.Common.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
