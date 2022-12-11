@@ -47,6 +47,19 @@ public class AoCClient : IDisposable
         return content.Select(parse).ToArray();
     }
 
+    public async Task<int[,]> GetIntMatrixAsync(int year, int day)
+    {
+        var raw = await GetLinesAsync(year, day);
+        if (raw.Select(p => p.Length).Distinct().Count() != 1)
+            throw new InvalidOperationException("Cannot parse input as int matrix, lines have different width.");
+        var res = new int[raw[0].Length, raw.Length];
+        for (int j = 0; j < raw.Length; j++)
+            for (int i = 0; i < raw[0].Length; i++)
+                res[i, j] = raw[i][j] - '0';
+
+        return res;
+    }
+
     private async Task<string> EnsureCachedAsync(int year, int day, string key, Func<Task<string>> resolveFromSource)
     {
         var cacheKey = $"AOC_{year}_{day}_{key}.txt";

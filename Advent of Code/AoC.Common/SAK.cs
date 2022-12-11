@@ -16,10 +16,10 @@ public static class SAK
 
     public static void DrawMap(int[,] map, int align = 1)
     {
-        for (int y = 0; y < map.GetLength(1); y++)
+        for (int x = 0; x < map.GetLength(1); x++)
         {
             string line = "";
-            for (int x = 0; x < map.GetLength(0); x++)
+            for (int y = 0; y < map.GetLength(0); y++)
             {
                 line += map[x, y].ToString().PadLeft(align) + " ";
             }
