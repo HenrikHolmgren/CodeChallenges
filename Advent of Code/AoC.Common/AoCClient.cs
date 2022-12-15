@@ -47,16 +47,18 @@ public class AoCClient : IDisposable
         return content.Select(parse).ToArray();
     }
 
-    public async Task<int[,]> GetIntMatrixAsync(int year, int day)
+    public async Task<int[,]> GetIntMatrixAsync(int year, int day, char offset = '0')
     {
         var raw = await GetLinesAsync(year, day);
         if (raw.Select(p => p.Length).Distinct().Count() != 1)
             throw new InvalidOperationException("Cannot parse input as int matrix, lines have different width.");
+        System.Console.WriteLine($"Parsing {raw[0].Length}x{raw.Length} {offset} based map.");
         var res = new int[raw[0].Length, raw.Length];
-        for (int j = 0; j < raw.Length; j++)
+        for (int j = 0; j < raw.Length; j++){            
             for (int i = 0; i < raw[0].Length; i++)
-                res[i, j] = raw[i][j] - '0';
+                res[i, j] = raw[j][i] - offset;
 
+        }
         return res;
     }
 

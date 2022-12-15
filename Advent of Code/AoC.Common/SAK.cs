@@ -1,5 +1,22 @@
 ﻿namespace AoC.Common;
 
+public static class Extensions
+{
+    public static IEnumerable<IEnumerable<T>> Window<T>(this IEnumerable<T> items, int size)
+    {
+        var q = new Queue<T>(size);
+        foreach (var item in items)
+        {
+            q.Enqueue(item);
+            if (q.Count == size)
+            {
+                yield return q.ToList();
+                q.Dequeue();
+            }
+        }
+    }
+}
+
 public static class SAK
 {
     public static int[,] LoadMap(string rawInput)
@@ -14,12 +31,17 @@ public static class SAK
         return map;
     }
 
-    public static void DrawMap(int[,] map, int align = 1)
+    public static void DrawMap(int[,] map, int align = 1, (Point topLeft, Point bottomRight) window = default)
     {
-        for (int x = 0; x < map.GetLength(1); x++)
+        if(window == default)
+            window = new(new(0,0), new(map.GetLength(0), map.GetLength(1)));
+
+        System.Console.WriteLine("     " + String.Join(" ", Enumerable.Range(0, map.GetLength(0)).Select(p => p.ToString().PadLeft(align))));
+        System.Console.WriteLine("     " + String.Join(" ", Enumerable.Range(0, map.GetLength(0)).Select(p => new String('-', align))));
+        for (int y = window.topLeft.Y; y < window.bottomRight.Y; y++)
         {
-            string line = "";
-            for (int y = 0; y < map.GetLength(0); y++)
+            string line = y.ToString().PadLeft(align) + "| ";
+            for (int x = window.topLeft.X; x < window.bottomRight.X; x++)
             {
                 line += map[x, y].ToString().PadLeft(align) + " ";
             }
@@ -50,5 +72,12 @@ public static class SAK
                 probe != location)
                     yield return probe;
             }
+    }
+
+    public static IEnumerable<Point> Enumerate(int[,] map)
+    {
+        for (int x = 0; x < map.GetLength(0); x++)
+            for (int y = 0; y < map.GetLength(1); y++)
+                yield return new(x, y);
     }
 }
