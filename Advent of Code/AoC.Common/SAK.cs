@@ -36,11 +36,11 @@ public static class SAK
         if(window == default)
             window = new(new(0,0), new(map.GetLength(0), map.GetLength(1)));
 
-        System.Console.WriteLine("     " + String.Join(" ", Enumerable.Range(0, map.GetLength(0)).Select(p => p.ToString().PadLeft(align))));
-        System.Console.WriteLine("     " + String.Join(" ", Enumerable.Range(0, map.GetLength(0)).Select(p => new String('-', align))));
+        System.Console.WriteLine("     " + String.Join(" ", Enumerable.Range(window.topLeft.X, window.bottomRight.X - window.topLeft.X).Select(p => p.ToString().PadLeft(align))));
+        System.Console.WriteLine("     " + String.Join(" ", Enumerable.Range(window.topLeft.X, window.bottomRight.X - window.topLeft.X).Select(p => new String('-', align))));
         for (int y = window.topLeft.Y; y < window.bottomRight.Y; y++)
         {
-            string line = y.ToString().PadLeft(align) + "| ";
+            string line = y.ToString().PadLeft(align) + " | ";
             for (int x = window.topLeft.X; x < window.bottomRight.X; x++)
             {
                 line += map[x, y].ToString().PadLeft(align) + " ";
