@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>CodeChallenges.Driver</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WindowsillSoft.CodeChallenges.Core\WindowsillSoft.CodeChallenges.Core.csproj" />
+    <ProjectReference Include="..\WindowsillSoft.CodeChallenges.AdventOfCode\WindowsillSoft.CodeChallenges.AdventOfCode.csproj" />
+    <ProjectReference Include="..\WindowsillSoft.CodeChallenges.ProjectEuler\WindowsillSoft.CodeChallenges.ProjectEuler.csproj" />
+  </ItemGroup>
+
+</Project>

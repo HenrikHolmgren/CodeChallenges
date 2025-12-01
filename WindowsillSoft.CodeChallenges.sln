@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsillSoft.CodeChalleng
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsillSoft.CodeChallenges.ProjectEuler.Tests", "WindowsillSoft.CodeChallenges.ProjectEuler.Tests\WindowsillSoft.CodeChallenges.ProjectEuler.Tests.csproj", "{59C2EB4D-F51F-47BE-8FB6-DBB93475E55B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeChallenges.Driver", "CodeChallenges.Driver\CodeChallenges.Driver.csproj", "{F8A8C3D1-4E5F-4C7A-9B8D-1234567890AB}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FCCCDD03-937E-4C76-897A-4BEDA33348D9}"
 	ProjectSection(SolutionItems) = preProject
 		AocSolver.snippet = AocSolver.snippet
@@ -51,6 +53,10 @@ Global
 		{59C2EB4D-F51F-47BE-8FB6-DBB93475E55B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59C2EB4D-F51F-47BE-8FB6-DBB93475E55B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59C2EB4D-F51F-47BE-8FB6-DBB93475E55B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8A8C3D1-4E5F-4C7A-9B8D-1234567890AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8A8C3D1-4E5F-4C7A-9B8D-1234567890AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8A8C3D1-4E5F-4C7A-9B8D-1234567890AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8A8C3D1-4E5F-4C7A-9B8D-1234567890AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
