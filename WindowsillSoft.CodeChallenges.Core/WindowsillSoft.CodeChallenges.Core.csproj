@@ -1,9 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>9</LangVersion>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+  <!-- All common properties inherited from Directory.Build.props -->
 
 </Project>
