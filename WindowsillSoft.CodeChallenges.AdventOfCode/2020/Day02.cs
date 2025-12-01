@@ -15,7 +15,7 @@ public class Day02 : AdventOfCode2020SolverBase
         char Pattern,
         string Subject);
 
-    private PasswordWithRule[] Passwords = new PasswordWithRule[0];
+    private PasswordWithRule[] Passwords = [];
 
     public Day02(IIOProvider provider) : base(provider) { }
 

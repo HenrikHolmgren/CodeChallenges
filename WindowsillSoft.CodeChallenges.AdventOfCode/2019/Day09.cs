@@ -5,7 +5,7 @@ using WindowsillSoft.CodeChallenges.Core;
 namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019;
 public class Day09 : AdventOfCode2019SolverBase
 {
-    private long[] _input = new long[0];
+    private long[] _input = [];
 
     public override string Name => "Day 9: Sensor Boost";
     public Day09(IIOProvider provider) : base(provider) { }

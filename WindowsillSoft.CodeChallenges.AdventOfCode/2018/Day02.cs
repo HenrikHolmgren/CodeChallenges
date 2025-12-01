@@ -7,7 +7,7 @@ public class Day02 : AdventOfCode2018SolverBase
 {
     public override string Name => "Day 2: Inventory Management System";
 
-    private string[] _input = new string[0];
+    private string[] _input = [];
 
     public Day02(IIOProvider provider) : base(provider) { }
 

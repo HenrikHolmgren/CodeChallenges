@@ -7,7 +7,7 @@ public class Day01 : AdventOfCode2017SolverBase
     private int[] _digits;
 
     public Day01(IIOProvider provider) : base(provider)
-        => _digits = new int[0];
+        => _digits = [];
 
     public override string Name => "Day 1: Inverse Captcha";
 

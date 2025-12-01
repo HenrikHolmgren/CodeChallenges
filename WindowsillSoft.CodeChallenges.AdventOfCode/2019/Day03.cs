@@ -7,7 +7,7 @@ using WindowsillSoft.CodeChallenges.Core.Geometry;
 namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019;
 public class Day03 : AdventOfCode2019SolverBase
 {
-    private AxisAlignedWireSegment[][] _wires = new AxisAlignedWireSegment[0][];
+    private AxisAlignedWireSegment[][] _wires = [][];
 
     public override string Name => "Day 3: Crossed Wires";
 
@@ -15,7 +15,7 @@ public class Day03 : AdventOfCode2019SolverBase
 
     public override string ExecutePart1()
     {
-        var minLength = new ManhattanPointNInt(new[] { 100_000, 100_000 });
+        var minLength = new ManhattanPointNInt([ 100_000, 100_000 });
         var intersections = new List<ManhattanPointNInt>();
         foreach (var segment0 in _wires[0])
             foreach (var segment1 in _wires[1])
@@ -80,15 +80,15 @@ public class Day03 : AdventOfCode2019SolverBase
 
     private IEnumerable<AxisAlignedWireSegment> BuildAxisAlignedSegments(WireSegment[] arg1)
     {
-        var position = new ManhattanPointNInt(new[] { 0, 0 });
+        var position = new ManhattanPointNInt([ 0, 0 });
         foreach (var segment in arg1)
         {
             var nextPosition = segment.Direction switch
             {
-                'L' => position + new ManhattanPointNInt(new[] { -segment.Length, 0 }),
-                'R' => position + new ManhattanPointNInt(new[] { segment.Length, 0 }),
-                'U' => position + new ManhattanPointNInt(new[] { 0, segment.Length }),
-                'D' => position + new ManhattanPointNInt(new[] { 0, -segment.Length }),
+                'L' => position + new ManhattanPointNInt([ -segment.Length, 0 }),
+                'R' => position + new ManhattanPointNInt([ segment.Length, 0 }),
+                'U' => position + new ManhattanPointNInt([ 0, segment.Length }),
+                'D' => position + new ManhattanPointNInt([ 0, -segment.Length }),
                 _ => throw new InvalidOperationException($"Unknown direction: {segment.Direction}")
             };
             yield return new AxisAlignedWireSegment(position, nextPosition);
@@ -134,7 +134,7 @@ public class Day03 : AdventOfCode2019SolverBase
                 source2[1] >= source1[1] && source2[1] <= source1[1] + Length &&
                 !(source1[0] == 0 && source1[1] == 0))
             {
-                return new ManhattanPointNInt(new[] { source1[0], source2[1] });
+                return new ManhattanPointNInt([ source1[0], source2[1] });
             }
             return null;
         }

@@ -10,7 +10,7 @@ public class Day07 : AdventOfCode2018SolverBase
 {
     private int _taskTime = 60;
     private int _workerCount = 5;
-    private Edge[] _edges = new Edge[0];
+    private Edge[] _edges = [];
 
     public Day07(IIOProvider provider) : base(provider) { }
 

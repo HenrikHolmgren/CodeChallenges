@@ -29,7 +29,7 @@ public class Day14 : AdventOfCode2018SolverBase
        
 
 
-        var latestLocations = new int[] { 0, 1 };
+        var latestLocations = [ 0, 1 };
 
         List<int> state = new List<int>(_initialState.Select(p => p - '0'));
 
@@ -55,7 +55,7 @@ public class Day14 : AdventOfCode2018SolverBase
 
     public override string ExecutePart2()
     {
-        var latestLocations = new int[] { 0, 1 };
+        var latestLocations = [ 0, 1 };
 
         List<int> state = new List<int>(_initialState.Select(p => p - '0'));
         var searchPattern = _pattern.Select(p => p - '0').ToArray();
@@ -100,7 +100,7 @@ public class Day14 : AdventOfCode2018SolverBase
     /*
             private void Optimized(string input, int target, string pattern)
             {
-                var latestLocations = new int[] { 0, 1 };
+                var latestLocations = [ 0, 1 };
 
                 bool huntingTarget = true;
                 bool huntingPattern = true;

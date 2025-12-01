@@ -7,7 +7,7 @@ public class Day15 : AdventOfCode2017SolverBase
 {
     private long[] _initialValues;
 
-    public Day15(IIOProvider provider) : base(provider) => _initialValues = new long[0];
+    public Day15(IIOProvider provider) : base(provider) => _initialValues = [];
 
     public override string Name => "Day 15: Dueling Generators";
 

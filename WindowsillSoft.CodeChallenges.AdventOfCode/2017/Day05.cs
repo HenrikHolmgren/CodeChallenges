@@ -7,7 +7,7 @@ public class Day05 : AdventOfCode2017SolverBase
 {
     private int[] _jumpList;
 
-    public Day05(IIOProvider provider) : base(provider) => _jumpList = new int[0];
+    public Day05(IIOProvider provider) : base(provider) => _jumpList = [];
 
     public override string Name => "Day 5: A Maze of Twisty Trampolines, All Alike";
 

@@ -18,7 +18,7 @@ public class Day04 : AdventOfCode2020SolverBase
         new ValidationRule("eyr", true, p => int.TryParse(p, out var res) && res >= 2020 && res <= 2030),
         new ValidationRule("hgt", true, IsValidHeight),
         new ValidationRule("hcl", true, p=>Regex.IsMatch(p, "^#[0-9a-f]{6}$")),
-        new ValidationRule("ecl", true, p=>new[]{"amb", "blu", "brn", "gry", "grn", "hzl", "oth" }.Contains(p) ),
+        new ValidationRule("ecl", true, p=>["amb", "blu", "brn", "gry", "grn", "hzl", "oth" }.Contains(p) ),
         new ValidationRule("pid", true, p=>Regex.IsMatch(p, "^\\d{9}$")),
         new ValidationRule("cid", false, p => true),
     };

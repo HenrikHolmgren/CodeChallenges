@@ -45,7 +45,7 @@ public class Day10 : AdventOfCode2017SolverBase
     public override string ExecutePart2()
     {
         var input = _input.Select(p => (int)p)
-            .Concat(new[] { 17, 31, 73, 47, 23 })
+            .Concat([ 17, 31, 73, 47, 23 })
             .ToArray();
         
         var queue = new CircleQueue(_queueSize);

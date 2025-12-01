@@ -8,7 +8,7 @@ public class Day01 : AdventOfCode2018SolverBase
 {
     public override string Name => "Day 1: Chronal Calibration";
 
-    private int[] _input = new int[0];
+    private int[] _input = [];
 
     public Day01(IIOProvider provider) : base(provider) { }
 

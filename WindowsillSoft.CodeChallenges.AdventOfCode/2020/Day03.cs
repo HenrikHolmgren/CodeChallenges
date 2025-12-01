@@ -7,7 +7,7 @@ using WindowsillSoft.CodeChallenges.Core;
 namespace WindowsillSoft.CodeChallenges.AdventOfCode._2020;
 public class Day03 : AdventOfCode2020SolverBase
 {
-    protected bool[][] _map = new bool[0][];
+    protected bool[][] _map = [][];
 
     protected record Position(int X, int Y);
     public Day03(IIOProvider provider) : base(provider) { }
@@ -22,7 +22,7 @@ public class Day03 : AdventOfCode2020SolverBase
     public override string ExecutePart2()
     {
         long accumulator = 1;
-        foreach (var candidateDirection in new[] { (1, 1), (3, 1), (5, 1), (7, 1), (1, 2) })
+        foreach (var candidateDirection in [ (1, 1), (3, 1), (5, 1), (7, 1), (1, 2) })
             accumulator *= GetCollisionsForCourse(candidateDirection.Item1, candidateDirection.Item2);
         return accumulator.ToString();
     }

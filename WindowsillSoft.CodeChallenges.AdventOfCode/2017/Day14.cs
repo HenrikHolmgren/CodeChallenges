@@ -9,7 +9,7 @@ public class Day14 : AdventOfCode2017SolverBase
 {
     private string[] _hashes;
 
-    public Day14(IIOProvider provider) : base(provider) => _hashes = new string[0];
+    public Day14(IIOProvider provider) : base(provider) => _hashes = [];
 
     public override string Name => "Day 14: Disk Defragmentation";
 

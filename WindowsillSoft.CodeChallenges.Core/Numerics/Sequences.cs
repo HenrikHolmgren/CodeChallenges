@@ -58,7 +58,7 @@ public static class Sequences
             var head = sequence.First();
             foreach (var sub in SubSets(sequence.Skip(1)))
             {
-                yield return new[] { head }.Concat(sub);
+                yield return [ head }.Concat(sub);
                 yield return sub;
             }
         }
@@ -69,7 +69,7 @@ public static class Sequences
         if (!sequence.Any())
             return Enumerable.Empty<IEnumerable<T>>();
         else if (!sequence.Skip(1).Any())
-            return new[] { sequence };
+            return [ sequence };
         else
             return sequence.SelectMany(
                 (v, i) => Permutations(sequence.Take(i).Concat(sequence.Skip(i + 1))),

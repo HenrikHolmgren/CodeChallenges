@@ -6,7 +6,7 @@ using WindowsillSoft.CodeChallenges.Core;
 namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019;
 public class Day02 : AdventOfCode2019SolverBase
 {
-    private long[] _input = new long[0];
+    private long[] _input = [];
 
     public override string Name => "Day 2: 1202 Program Alarm";
     public Day02(IIOProvider provider) : base(provider) { }

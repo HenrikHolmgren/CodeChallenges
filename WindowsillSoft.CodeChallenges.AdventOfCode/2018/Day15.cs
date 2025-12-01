@@ -8,7 +8,7 @@ using WindowsillSoft.CodeChallenges.Core;
 namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018;
 public class Day15 : AdventOfCode2018SolverBase
 {
-    private string[] _mapLayout = new string[0];
+    private string[] _mapLayout = [];
 
     public Day15(IIOProvider provider) : base(provider) { }
 
@@ -171,7 +171,7 @@ public class Day15 : AdventOfCode2018SolverBase
                 select (x, y))
             {
                 Layout[c.x, c.y] = mapLayout[c.y][c.x];
-                if (new[] { 'G', 'E' }.Contains(Layout[c.x, c.y]))
+                if ([ 'G', 'E' }.Contains(Layout[c.x, c.y]))
                     _Actors.Add(new Actor(c.x, c.y, Layout[c.x, c.y]));
             }
         }
@@ -304,7 +304,7 @@ public class Day15 : AdventOfCode2018SolverBase
 
                 fringe.RemoveAt(0);
                 var dist = distances[current.x, current.y];
-                foreach (var candidate in new[] { (0, -1), (-1, 0), (1, 0), (0, 1) })
+                foreach (var candidate in [ (0, -1), (-1, 0), (1, 0), (0, 1) })
                     if (Layout[current.x + candidate.Item1, current.y + candidate.Item2] == '.')
                     {
                         if (distances[current.x + candidate.Item1, current.y + candidate.Item2] != int.MaxValue)
@@ -328,7 +328,7 @@ public class Day15 : AdventOfCode2018SolverBase
                 var next = position;
                 var bestDist = Int32.MaxValue;
 
-                foreach (var candidate in new[] { (0, 1), (1, 0), (-1, 0), (0, -1) })
+                foreach (var candidate in [ (0, 1), (1, 0), (-1, 0), (0, -1) })
                     if (returnDistances[position.X + candidate.Item1, position.Y + candidate.Item2] <= returnDistances[next.X, next.Y])
                     {
                         next = (position.X + candidate.Item1, position.Y + candidate.Item2);

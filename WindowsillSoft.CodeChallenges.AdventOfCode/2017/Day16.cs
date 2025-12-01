@@ -9,7 +9,7 @@ public class Day16 : AdventOfCode2017SolverBase
     private int _programCount;
     private DanceMove[] _danceCard;
 
-    public Day16(IIOProvider provider) : base(provider) => _danceCard = new DanceMove[0];
+    public Day16(IIOProvider provider) : base(provider) => _danceCard = [];
 
     public override string Name => "Day 16: Permutation Promenade";
 

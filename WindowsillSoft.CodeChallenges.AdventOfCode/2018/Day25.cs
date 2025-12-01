@@ -7,7 +7,7 @@ using WindowsillSoft.CodeChallenges.Core.Geometry;
 namespace WindowsillSoft.CodeChallenges.AdventOfCode._2018;
 public class Day25 : AdventOfCode2018SolverBase
 {
-    private ManhattanPointNInt[] _anomalies = new ManhattanPointNInt[0];
+    private ManhattanPointNInt[] _anomalies = [];
 
     public Day25(IIOProvider provider) : base(provider) { }
 
@@ -31,7 +31,7 @@ public class Day25 : AdventOfCode2018SolverBase
 
             if (matchingConstellations.Count == 0)
             {
-                target = new Constellation(new[] { point });
+                target = new Constellation([ point });
                 constellations.Add(target);
                 continue;
             }
@@ -63,7 +63,7 @@ public class Day25 : AdventOfCode2018SolverBase
 
         public Constellation(IEnumerable<ManhattanPointNInt> points)
         {
-            _boundingCube = new[] { points.First(), points.First() };
+            _boundingCube = [ points.First(), points.First() };
             _points = new List<ManhattanPointNInt>();
             foreach (var newpoint in points)
                 Add(newpoint);

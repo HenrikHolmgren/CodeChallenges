@@ -7,7 +7,7 @@ public class Day09 : AdventOfCode2020SolverBase
     private int _preampleLength;
     private long[] _code;
 
-    public Day09(IIOProvider provider) : base(provider) { _code = new long[0]; }
+    public Day09(IIOProvider provider) : base(provider) { _code = []; }
 
     public override string Name => "Day 9: Encoding Error";
 

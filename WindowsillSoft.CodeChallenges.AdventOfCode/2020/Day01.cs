@@ -6,7 +6,7 @@ using WindowsillSoft.CodeChallenges.Core;
 namespace WindowsillSoft.CodeChallenges.AdventOfCode._2020;
 public class Day01 : AdventOfCode2020SolverBase
 {
-    private int[] _expenses = new int[0];
+    private int[] _expenses = [];
 
     public Day01(IIOProvider provider) : base(provider) { }
 
@@ -49,6 +49,6 @@ public class Day01 : AdventOfCode2020SolverBase
 
     public override void Initialize(string input)
     {
-        _expenses = ReadAndSplitInput<int>(input).OrderBy(p => p).ToArray();
+        _expenses = ReadAndSplitInput<int>(input).Order().ToArray();
     }
 }

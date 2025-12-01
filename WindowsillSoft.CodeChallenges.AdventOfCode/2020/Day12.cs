@@ -59,7 +59,7 @@ public class Day12 : AdventOfCode2020SolverBase
         }
     }
 
-    private Instruction[] _instructions = new Instruction[0];
+    private Instruction[] _instructions = [];
 
 
     public Day12(IIOProvider provider) : base(provider) { }

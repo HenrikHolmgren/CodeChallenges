@@ -8,7 +8,7 @@ namespace WindowsillSoft.CodeChallenges.AdventOfCode._2020;
 public class Day13 : AdventOfCode2020SolverBase
 {
     private int _departureTime;
-    private int[] _busses = new int[0];
+    private int[] _busses = [];
 
     public Day13(IIOProvider provider) : base(provider) { }
 

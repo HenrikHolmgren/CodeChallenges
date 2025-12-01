@@ -9,7 +9,7 @@ public class Day07 : AdventOfCode2017SolverBase
 {
     private RecursiveTreeNode[] _treeRoots;
 
-    public Day07(IIOProvider provider) : base(provider) => _treeRoots = new RecursiveTreeNode[0];
+    public Day07(IIOProvider provider) : base(provider) => _treeRoots = [];
 
     public override string Name => "Day 7: Recursive Circus";
 

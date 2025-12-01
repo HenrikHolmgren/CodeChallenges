@@ -9,7 +9,7 @@ public class Day03 : AdventOfCode2018SolverBase
 {
     public override string Name => "Day 3: No Matter How You Slice It";
 
-    private Claim[] _claims = new Claim[0];
+    private Claim[] _claims = [];
 
     public Day03(IIOProvider provider) : base(provider) { }
 

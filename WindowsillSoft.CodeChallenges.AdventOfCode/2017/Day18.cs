@@ -83,7 +83,7 @@ public class Day18 : AdventOfCode2017SolverBase
         private string DumpState(Dictionary<char, long> state)
         {
             return "{"
-                + String.Join(" ", state.Keys.OrderBy(p => p)
+                + String.Join(" ", state.Keys.Order()
                 .Select(p => $"{p}:{state[p]}"))
                 + "}";
         }
@@ -266,7 +266,7 @@ public class Day18 : AdventOfCode2017SolverBase
         private string DumpState(Dictionary<char, long> state)
         {
             return "{"
-                + String.Join(" ", state.Keys.OrderBy(p => p)
+                + String.Join(" ", state.Keys.Order()
                 .Select(p => $"{p}:{state[p]}"))
                 + "}";
         }

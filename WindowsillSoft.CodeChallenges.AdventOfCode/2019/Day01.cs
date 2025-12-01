@@ -6,7 +6,7 @@ using WindowsillSoft.CodeChallenges.Core;
 namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019;
 public class Day01 : AdventOfCode2019SolverBase
 {
-    private int[] _inputMasses = new int[0];
+    private int[] _inputMasses = [];
 
     public Day01(IIOProvider provider) : base(provider) { }
 

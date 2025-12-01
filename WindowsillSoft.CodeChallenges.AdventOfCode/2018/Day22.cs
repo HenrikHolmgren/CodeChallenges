@@ -46,9 +46,9 @@ public class Day22 : AdventOfCode2018SolverBase
 
         Dictionary<int, Tool[]> allowedTools = new Dictionary<int, Tool[]>
         {
-            { 0, new[] { Tool.ClimbingGear, Tool.Torch} }, //rocky
-            { 1, new[] { Tool.ClimbingGear, Tool.Neither } }, //wet
-            { 2, new[] { Tool.Torch, Tool.Neither } } //narrow
+            { 0, [ Tool.ClimbingGear, Tool.Torch} }, //rocky
+            { 1, [ Tool.ClimbingGear, Tool.Neither } }, //wet
+            { 2, [ Tool.Torch, Tool.Neither } } //narrow
         };
         while (Fringe.Any())
         {

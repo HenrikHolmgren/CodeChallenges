@@ -9,7 +9,7 @@ public class Day04 : AdventOfCode2017SolverBase
     private string[] _passPhrases;
 
     public Day04(IIOProvider provider) : base(provider)
-        => _passPhrases = new string[0];
+        => _passPhrases = [];
 
     public override string Name => "Day 4: High-Entropy Passphrases";
 

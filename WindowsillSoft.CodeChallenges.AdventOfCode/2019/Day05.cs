@@ -8,7 +8,7 @@ using WindowsillSoft.CodeChallenges.Core;
 namespace WindowsillSoft.CodeChallenges.AdventOfCode._2019;
 public class Day05 : AdventOfCode2019SolverBase
 {
-    long[] _program = new long[] { };
+    long[] _program = [];
 
     public Day05(IIOProvider provider) : base(provider) { }
 

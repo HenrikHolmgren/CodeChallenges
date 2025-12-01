@@ -17,7 +17,7 @@ public class Day04 : AdventOfCode2018SolverBase
     {
         var matcher = new Regex(@"\[(?'year'\d{4})-(?'month'\d{2})-(?'day'\d{2}) (?'hour'\d{2}):(?'minute'\d{2})] (Guard #(?'guard'\d+) )?(?'action'begins shift|wakes up|falls asleep)", RegexOptions.Compiled);
         var logs = ReadAndSplitInput<string>(input)
-            .OrderBy(p => p)
+            .Order()
             .Select(p => matcher.Match(p))
             .Select(p => new
             {

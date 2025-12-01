@@ -7,7 +7,7 @@ using WindowsillSoft.CodeChallenges.Core;
 namespace WindowsillSoft.CodeChallenges.AdventOfCode._2020;
 public class Day10 : AdventOfCode2020SolverBase
 {
-    int[] _adapterJotages = new int[0];
+    int[] _adapterJotages = [];
 
     public Day10(IIOProvider provider) : base(provider) { }
 
@@ -73,7 +73,7 @@ public class Day10 : AdventOfCode2020SolverBase
     //Left as simple n log n sort for now to avoid unnecessary rocket surgery.
     public override void Initialize(string input)
     {
-        var rawInput = ReadAndSplitInput<int>(input).OrderBy(p => p).ToList();
+        var rawInput = ReadAndSplitInput<int>(input).Order().ToList();
         rawInput.Insert(0, 0); //Wall outlet
         rawInput.Add(rawInput.Last() + 3); //Device adapter
         _adapterJotages = rawInput.ToArray();

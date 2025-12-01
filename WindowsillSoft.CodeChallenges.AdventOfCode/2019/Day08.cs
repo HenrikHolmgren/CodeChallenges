@@ -53,7 +53,7 @@ public class Day08 : AdventOfCode2019SolverBase
 
     public class SifImage
     {
-        public SifImageLayer[] Layers { get; private set; } = new SifImageLayer[0];
+        public SifImageLayer[] Layers { get; private set; } = [];
         public static SifImage Parse(string encoding, int width, int height)
         {
             if (encoding.Length % width != 0 || encoding.Length % height != 0)

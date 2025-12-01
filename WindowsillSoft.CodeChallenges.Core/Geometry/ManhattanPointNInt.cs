@@ -142,8 +142,8 @@ public class AxisAlignedLineSegment
             if (P2 == other.P2 && P1 != other.P1) return P2;
             if (P2 == other.P1 && P1 != other.P2) return P2;
 
-            var intervalA = P1 < P2 ? new[] { P1[AlignedAxis], P2[AlignedAxis] } : new[] { P2[AlignedAxis], P1[AlignedAxis] };
-            var intervalB = other.P1 < other.P2 ? new[] { other.P1[AlignedAxis], other.P2[AlignedAxis] } : new[] { other.P2[AlignedAxis], other.P1[AlignedAxis] };
+            var intervalA = P1 < P2 ? [ P1[AlignedAxis], P2[AlignedAxis] } : [ P2[AlignedAxis], P1[AlignedAxis] };
+            var intervalB = other.P1 < other.P2 ? [ other.P1[AlignedAxis], other.P2[AlignedAxis] } : [ other.P2[AlignedAxis], other.P1[AlignedAxis] };
 
             if((intervalA[0] < intervalB[0] && intervalB[0] < intervalA[1])
                 || (intervalA[0] > intervalB[0] && intervalA[0] < intervalB[1]))

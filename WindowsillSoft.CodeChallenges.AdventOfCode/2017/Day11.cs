@@ -8,7 +8,7 @@ public class Day11 : AdventOfCode2017SolverBase
     private string[] _steps;
 
     public Day11(IIOProvider provider) : base(provider)
-        => _steps = new string[0];
+        => _steps = [];
 
     public override string Name => "Day 11: Hex Ed";
 

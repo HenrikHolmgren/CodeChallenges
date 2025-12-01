@@ -142,7 +142,7 @@ public class Day23 : AdventOfCode2018SolverBase
             _Y = drones.Min(p => p.Y);
             _Z = drones.Min(p => p.Z);
 
-            var maxWidth = new[] {
+            var maxWidth = [
             drones.Max(p => p.X) - _X,
             drones.Max(p => p.Y) - _Y,
             drones.Max(p => p.Z) - _Z }

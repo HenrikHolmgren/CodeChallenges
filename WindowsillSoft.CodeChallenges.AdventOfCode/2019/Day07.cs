@@ -10,7 +10,7 @@ public class Day07 : AdventOfCode2019SolverBase
 {
     private long[] _program;
 
-    public Day07(IIOProvider provider) : base(provider) { _program = new long[] { }; }
+    public Day07(IIOProvider provider) : base(provider) { _program = []; }
 
     public override string Name => "";
 

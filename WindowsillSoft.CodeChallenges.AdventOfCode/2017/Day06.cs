@@ -8,7 +8,7 @@ public class Day06 : AdventOfCode2017SolverBase
 {
     private int[] _banks;
 
-    public Day06(IIOProvider provider) : base(provider) => _banks = new int[0];
+    public Day06(IIOProvider provider) : base(provider) => _banks = [];
 
     public override string Name => "Day 6: Memory Reallocation";
 

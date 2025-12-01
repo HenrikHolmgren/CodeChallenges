@@ -7,7 +7,7 @@ public class Day02 : AdventOfCode2017SolverBase
 {
     private int[][] _sheet;
     public Day02(IIOProvider provider) : base(provider)
-        => _sheet = new int[0][];
+        => _sheet = [][];
     public override string Name => "Day 2: Corruption Checksum";
 
     public override void Initialize(string input)
