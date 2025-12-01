@@ -1,73 +1,71 @@
 ﻿using NUnit.Framework;
 using WindowsillSoft.CodeChallenges.AdventOfCode._2019;
 
-namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests.AoC2019
+namespace WindowsillSoft.CodeChallenges.AdventOfCode.Tests.AoC2019;
+public class Day06Test : TestBase<Day06>
 {
-    public class Day06Test : TestBase<Day06>
+    [Test]
+    public void OrbitTree_Parses()
     {
-        [Test]
-        public void OrbitTree_Parses()
-        {
-            var tree = new Day06.OrbitTree(new[]{"COM)B",
-                "B)C",
-                "C)D",
-                "D)E",
-                "E)F",
-                "B)G",
-                "G)H",
-                "D)I",
-                "E)J",
-                "J)K",
-                "K)L" });
-            Assert.That(tree.ToString(), Is.EqualTo("COM {B {C {D {E {F {}, J {K {L {}}}}, I {}}}, G {H {}}}}"));
-        }
+        var tree = new Day06.OrbitTree(["COM)B",
+            "B)C",
+            "C)D",
+            "D)E",
+            "E)F",
+            "B)G",
+            "G)H",
+            "D)I",
+            "E)J",
+            "J)K",
+            "K)L" ]);
+        Assert.That(tree.ToString(), Is.EqualTo("COM {B {C {D {E {F {], J {K {L {}}}], I {}}], G {H {}}}}"));
+    }
 
-        [Test]
-        public void OrbitTree_CountOrbits()
-        {
-            var tree = new Day06.OrbitTree(new[]{
-                "COM)B",
-                "B)C",
-                "C)D",
-                "D)E",
-                "E)F",
-                "B)G",
-                "G)H",
-                "D)I",
-                "E)J",
-                "J)K",
-                "K)L" });
-            Assert.That(tree.CountOrbits(), Is.EqualTo(42));
-        }
+    [Test]
+    public void OrbitTree_CountOrbits()
+    {
+        var tree = new Day06.OrbitTree([
+            "COM)B",
+            "B)C",
+            "C)D",
+            "D)E",
+            "E)F",
+            "B)G",
+            "G)H",
+            "D)I",
+            "E)J",
+            "J)K",
+            "K)L" ]);
+        Assert.That(tree.CountOrbits(), Is.EqualTo(42));
+    }
 
-        [Test]
-        public void OrbitTree_Minimum_transfer_count()
-        {
-            var tree = new Day06.OrbitTree(new[]
-            {
-                "COM)B",
-                "B)C",
-                "C)D",
-                "D)E",
-                "E)F",
-                "B)G",
-                "G)H",
-                "D)I",
-                "E)J",
-                "J)K",
-                "K)L",
-                "K)YOU",
-                "I)SAN"
-            });
+    [Test]
+    public void OrbitTree_Minimum_transfer_count()
+    {
+        var tree = new Day06.OrbitTree([
+            "COM)B",
+            "B)C",
+            "C)D",
+            "D)E",
+            "E)F",
+            "B)G",
+            "G)H",
+            "D)I",
+            "E)J",
+            "J)K",
+            "K)L",
+            "K)YOU",
+            "I)SAN"
+        ]);
 
-            var result = tree.MinimumTransferCount("SAN", "YOU");
-            Assert.That(result, Is.EqualTo(4));
-        }
+        var result = tree.MinimumTransferCount("SAN", "YOU");
+        Assert.That(result, Is.EqualTo(4));
+    }
 
-        [Test]
-        public void FullRun()
-        {
-            var solver = GetSolver(@"N66)QHW
+    [Test]
+    public void FullRun()
+    {
+        var solver = GetSolver(@"N66)QHW
 JLG)GBP
 12Q)F84
 JMQ)QDZ
@@ -1512,10 +1510,8 @@ B5V)5LB
 N3R)Z7F
 72Z)Q4K");
 
-            Assert.That(solver.ExecutePart1(), Is.EqualTo("241064"));
-            Assert.That(solver.ExecutePart2(), Is.EqualTo("418"));
+        Assert.That(solver.ExecutePart1(), Is.EqualTo("241064"));
+        Assert.That(solver.ExecutePart2(), Is.EqualTo("418"));
 
-        }
     }
 }
-

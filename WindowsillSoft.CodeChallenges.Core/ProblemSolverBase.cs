@@ -1,33 +1,31 @@
 ﻿using System;
 
-namespace WindowsillSoft.CodeChallenges.Core
+namespace WindowsillSoft.CodeChallenges.Core;
+public abstract class ProblemSolverBase
 {
-    public abstract class ProblemSolverBase
-    {
-        public abstract string Name { get; }
+    public abstract string Name { get; }
 
-        public abstract void Initialize();
-        public abstract object ExecuteObject();
-    }
+    public abstract void Initialize();
+    public abstract object ExecuteObject();
+}
 
-    [SolverCategory("Code challenges")]
-    public abstract class ProblemSolverBase<TResult> : ProblemSolverBase
-    {
-        protected IIOProvider IO { get; }
+[SolverCategory("Code challenges")]
+public abstract class ProblemSolverBase<TResult> : ProblemSolverBase
+{
+    protected IIOProvider IO { get; }
 
-        public abstract TResult Execute();
+    public abstract TResult Execute();
 #pragma warning disable CS8603 // Possible null reference return.
-        public override object ExecuteObject() => Execute();
+    public override object ExecuteObject() => Execute();
 #pragma warning restore CS8603 // Possible null reference return.
 
-        public ProblemSolverBase(IIOProvider provider) => IO = provider;
+    public ProblemSolverBase(IIOProvider provider) => IO = provider;
 
-    }
+}
 
-    public class SolverCategoryAttribute : Attribute
-    {
-        public string CategoryName { get; }
+public class SolverCategoryAttribute : Attribute
+{
+    public string CategoryName { get; }
 
-        public SolverCategoryAttribute(string categoryName) => CategoryName = categoryName;
-    }
+    public SolverCategoryAttribute(string categoryName) => CategoryName = categoryName;
 }
