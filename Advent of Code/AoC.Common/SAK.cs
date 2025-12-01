@@ -95,4 +95,33 @@ public static class SAK
             for (int y = 0; y < map.GetLength(1); y++)
                 yield return new(x, y);
     }
+
+    /// <summary>
+    /// Get all Von Neumann neighbors (4-directional) for a generic point
+    /// </summary>
+    public static IEnumerable<Point<T>> VonNeumannNeighbourhood<T>(Point<T> location) where T : INumber<T>
+    {
+        yield return location + Point<T>.Left;
+        yield return location + Point<T>.Up;
+        yield return location + Point<T>.Right;
+        yield return location + Point<T>.Down;
+    }
+
+    /// <summary>
+    /// Get all Moore neighbors (8-directional) around a point
+    /// </summary>
+    public static IEnumerable<Point<T>> MooreNeighbourhood<T>(Point<T> location) where T : INumber<T>
+    {
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+            {
+                if (dx == 0 && dy == 0) continue;
+
+                T x = location.X + T.CreateChecked(dx);
+                T y = location.Y + T.CreateChecked(dy);
+                yield return new Point<T>(x, y);
+            }
+        }
+    }
 }
