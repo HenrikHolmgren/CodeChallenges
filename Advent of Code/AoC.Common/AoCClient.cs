@@ -1,29 +1,36 @@
-﻿namespace AoC.Api;
+namespace AoC.Api;
+
 public class AoCClient : IDisposable
 {
-    private string _sessionId;
-    private Lazy<HttpClient> _client;
-    private string _cacheLocation;
-    private bool disposedValue;
+    private readonly string _sessionId;
+    private readonly Lazy<HttpClient> _client;
+    private readonly string _cacheLocation;
+    private bool _disposedValue;
 
     private HttpClient ConfigureClient()
     {
-        var client = new HttpClient();
-        client.BaseAddress = new Uri("https://adventofcode.com");
+        HttpClient client = new()
+        {
+            BaseAddress = new Uri("https://adventofcode.com")
+        };
         client.DefaultRequestHeaders.Add("cookie", $"session={_sessionId}");
         return client;
     }
 
-    public AoCClient() : this(Environment.GetEnvironmentVariable("AoCSessionId") ?? throw new ArgumentNullException("Either use the string overload or configure the AoCSessionId environment variable.")) { }
+    public AoCClient()
+        : this(Environment.GetEnvironmentVariable("AoCSessionId")
+            ?? throw new ArgumentNullException("sessionId", "Either use the string overload or configure the AoCSessionId environment variable."))
+    { }
 
-    public AoCClient(string sessionID)
-        => (_sessionId, _client, _cacheLocation) = (sessionID, new Lazy<HttpClient>(ConfigureClient), Path.GetTempPath());
+    public AoCClient(string sessionId)
+    {
+        _sessionId = sessionId;
+        _client = new Lazy<HttpClient>(ConfigureClient);
+        _cacheLocation = Path.GetTempPath();
+    }
 
-    public AoCClient WithCacheLocation(string cacheLocation)
-        => new AoCClient(_sessionId)
-        {
-            _cacheLocation = cacheLocation
-        };
+    public AoCClient WithCacheLocation(string cacheLocation) =>
+        new(_sessionId) { _cacheLocation = cacheLocation };
 
     public Task<string> GetRawInputAsync(int year, int day)
         => EnsureCachedAsync(year, day, "input", async () => await _client.Value.GetStringAsync($"{year}/day/{day}/input"));
@@ -31,20 +38,22 @@ public class AoCClient : IDisposable
     public async Task<string[]> GetLinesAsync(int year, int day, StringSplitOptions splitOptions = StringSplitOptions.RemoveEmptyEntries)
     {
         var content = await GetRawInputAsync(year, day);
-        return content.Split(new[] { '\r', '\n' }, splitOptions);
+        return content.Split(['\r', '\n'], splitOptions);
     }
 
     public async Task<int[]> GetNumbersAsync(int year, int day)
     {
         var content = await GetRawInputAsync(year, day);
-        return content.Split(new[] { '\r', '\n', ',' }, StringSplitOptions.RemoveEmptyEntries)
-        .Select(Int32.Parse).ToArray();
+        return content
+            .Split(['\r', '\n', ','], StringSplitOptions.RemoveEmptyEntries)
+            .Select(int.Parse)
+            .ToArray();
     }
 
     public async Task<T[]> GetParsedAsync<T>(int year, int day, Func<string, T> parse)
     {
         var content = await GetLinesAsync(year, day);
-        return content.Select(parse).ToArray();
+        return [..content.Select(parse)];
     }
 
     public async Task<int[,]> GetIntMatrixAsync(int year, int day, char offset = '0')
@@ -77,15 +86,14 @@ public class AoCClient : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!disposedValue)
+        if (!_disposedValue)
         {
-            if (disposing)
+            if (disposing && _client.IsValueCreated)
             {
-                if (_client.IsValueCreated)
-                    _client.Value.Dispose();
+                _client.Value.Dispose();
             }
 
-            disposedValue = true;
+            _disposedValue = true;
         }
     }
 

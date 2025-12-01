@@ -4,13 +4,13 @@ public static class Extensions
 {
     public static IEnumerable<IEnumerable<T>> Window<T>(this IEnumerable<T> items, int size)
     {
-        var q = new Queue<T>(size);
+        Queue<T> q = new(size);
         foreach (var item in items)
         {
             q.Enqueue(item);
             if (q.Count == size)
             {
-                yield return q.ToList();
+                yield return [..q];
                 q.Dequeue();
             }
         }
@@ -51,27 +51,42 @@ public static class SAK
 
     public static IEnumerable<Point> VonNeumannNeighbourhood(Point location, int maxX, int maxY, bool wrapAround = false)
     {
-        if (location.X > 0) yield return location with { X = location.X - 1 };
-        else if (wrapAround) yield return location with { X = maxX };
-        if (location.Y > 0) yield return location with { Y = location.Y - 1 };
-        else if (wrapAround) yield return location with { Y = maxY };
-        if (location.X < maxX) yield return location with { X = location.X + 1 };
-        else if (wrapAround) yield return location with { X = 0 };
-        if (location.Y < maxY) yield return location with { Y = location.Y + 1 };
-        else if (wrapAround) yield return location with { Y = 0 };
+        // Left
+        if (location.X > 0)
+            yield return location with { X = location.X - 1 };
+        else if (wrapAround)
+            yield return location with { X = maxX };
+
+        // Up
+        if (location.Y > 0)
+            yield return location with { Y = location.Y - 1 };
+        else if (wrapAround)
+            yield return location with { Y = maxY };
+
+        // Right
+        if (location.X < maxX)
+            yield return location with { X = location.X + 1 };
+        else if (wrapAround)
+            yield return location with { X = 0 };
+
+        // Down
+        if (location.Y < maxY)
+            yield return location with { Y = location.Y + 1 };
+        else if (wrapAround)
+            yield return location with { Y = 0 };
     }
 
     public static IEnumerable<Point> MooreNeighbourhood(Point location, int maxX, int maxY)
     {
         for (int x = location.X - 1; x <= location.X + 1; x++)
+        {
             for (int y = location.Y - 1; y <= location.Y + 1; y++)
             {
-                var probe = new Point(x, y);
-                if (x >= 0 && y >= 0 &&
-                x <= maxX && y <= maxY &&
-                probe != location)
+                Point probe = new(x, y);
+                if (x >= 0 && y >= 0 && x <= maxX && y <= maxY && probe != location)
                     yield return probe;
             }
+        }
     }
 
     public static IEnumerable<Point> Enumerate(int[,] map)
